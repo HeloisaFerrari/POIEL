@@ -1,0 +1,14 @@
+body{
+    background-color: rgba(255, 145, 0, 0.548);
+}
+h1{
+    text-align: center;
+    color: rgb(14, 73, 9);
+    stroke: black, 3px;
+}
+h2{
+    text-align: center;
+}
+footer{
+    color: black;
+}
