@@ -1,12 +1,492 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Chat - POIEL</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root{
+            --sage: #B5D19A;
+            --light-sage: #8DB873;
+            --moss-sage: #5F9A5A;
+            --olive-sage: #3F7F47;
+            --forest-sage: #2A5F36;
+            --deep-sage: #1B4326;
+            --fundo: #f4f7f0;
+        }
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body{
+            min-height: 100vh;
+            background-color: var(--fundo);
+            color: var(--deep-sage);
+        }
+
+        /* NAVBAR NOVA: fundo claro, logo com ícone, link ativo em destaque e botão verde */
+        .navbar{
+            background-color: #fbfdf8;
+            border-bottom: 1px solid #dfe8d8;
+            padding: 10px 0;
+        }
+        .navbar-brand{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 22px;
+            color: var(--deep-sage);
+        }
+        .navbar-brand:hover{ color: var(--deep-sage); }
+        .logo-icone{
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background-color: var(--olive-sage);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .navbar .nav-link{
+            color: var(--olive-sage);
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 12px;
+            transition: 0.2s;
+        }
+        .navbar .nav-link:hover{
+            background-color: #eef5e8;
+            color: var(--forest-sage);
+        }
+        .navbar .nav-link.ativo{               /* página onde você está */
+            background-color: #dcebd2;
+            color: var(--forest-sage);
+            border: 1px solid var(--sage);
+        }
+        .btn-cadastrar-livro{
+            background-color: var(--olive-sage);
+            border: 2px solid var(--olive-sage);
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 8px 18px;
+            transition: 0.4s;
+        }
+        .btn-cadastrar-livro:hover{
+            background-color: transparent;
+            color: var(--forest-sage);
+        }
+        .avatar-nav{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--sage);
+            color: var(--deep-sage);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        /* TÍTULO DA PÁGINA */
+        .titulo-pagina h1{
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--forest-sage);
+        }
+
+        /* CAIXAS: lista de contatos e conversa (mesma altura) */
+        .caixa{
+            background-color: #ffffff;
+            border: 1px solid #dfe8d8;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 65vh;
+            min-height: 380px;
+        }
+
+        /* ----- LISTA DE CONTATOS ----- */
+        .contatos-topo{
+            background-color: var(--forest-sage);
+            color: #ffffff;
+            padding: 14px 20px;
+            font-weight: 600;
+        }
+        .lista-contatos{
+            flex: 1;
+            overflow-y: auto;
+        }
+        .contato{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #edf2e9;
+            transition: 0.2s;
+        }
+        .contato:hover{
+            background-color: #eef5e8;
+        }
+        .contato.ativo{
+            background-color: #dcebd2;          /* contato selecionado */
+            border-left: 4px solid var(--olive-sage);
+        }
+        .contato .info{
+            min-width: 0;                        /* permite cortar o texto com "..." */
+        }
+        .contato .nome{
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .contato .previa{
+            font-size: 13px;
+            color: var(--moss-sage);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .avatar{
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background-color: var(--sage);
+            color: var(--deep-sage);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ----- CONVERSA ----- */
+        .chat-topo{
+            background-color: var(--olive-sage);
+            color: #ffffff;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .chat-topo small{ opacity: 0.85; }
+
+        .mensagens{
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: var(--fundo);
+        }
+
+        .balao{
+            max-width: 75%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 15px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+        .balao small{
+            display: block;
+            font-size: 11px;
+            margin-top: 4px;
+            opacity: 0.7;
+        }
+        .balao.minha{
+            align-self: flex-end;
+            background-color: var(--olive-sage);
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+        }
+        .balao.outro{
+            align-self: flex-start;
+            background-color: #ffffff;
+            border: 1px solid #dfe8d8;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-form{
+            display: flex;
+            gap: 10px;
+            padding: 12px 16px;
+            border-top: 1px solid #dfe8d8;
+            background-color: #ffffff;
+        }
+        .chat-form input{
+            flex: 1;
+            min-width: 0;
+            border: 2px solid var(--moss-sage);
+            border-radius: 40px;
+            padding: 8px 18px;
+            outline: none;
+            color: var(--deep-sage);
+        }
+        .chat-form input:focus{
+            border-color: var(--olive-sage);
+            box-shadow: 0 0 6px var(--light-sage);
+        }
+        .btn-enviar{
+            background-color: var(--olive-sage);
+            border: 2px solid var(--olive-sage);
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 40px;
+            padding: 8px 20px;
+            transition: 0.4s;
+        }
+        .btn-enviar:hover{
+            background-color: transparent;
+            color: var(--forest-sage);
+        }
+
+        footer{
+            background-color: var(--deep-sage);
+            color: #ffffff;
+            font-size: larger;
+        }
+    </style>
 </head>
 <body>
-    
+
+    <nav id="navBar" class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="paginaInicial.html">
+                <span class="logo-icone"><i class="bi bi-arrow-left-right"></i></span>
+                POIEL
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="paginaInicial.html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link " href="paginatroca.html">Minhas trocas</a></li>
+                    <li class="nav-item"><a class="nav-link ativo" href="paginachat.html" aria-label="Chat"><i class="bi bi-chat"></i></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Meu perfil</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <a class="btn btn-cadastrar-livro" href="#">+ Cadastrar livro</a>
+                    <a class="avatar-nav" href="#">HF</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+
+        <!-- TÍTULO -->
+        <div class="titulo-pagina mb-3">
+            <h1>Chat</h1>
+        </div>
+
+        <!-- row com 2 colunas: contatos (esquerda) e conversa (direita)
+             No celular as duas colunas ficam uma embaixo da outra (col-12) -->
+        <div class="row g-3">
+
+            <!-- COLUNA 1: CONTATOS -->
+            <div class="col-12 col-md-4">
+                <section class="caixa">
+                    <div class="contatos-topo">Contatos</div>
+                    <!-- o JavaScript coloca os contatos aqui dentro -->
+                    <div class="lista-contatos" id="listaContatos"></div>
+                </section>
+            </div>
+
+            <!-- COLUNA 2: CONVERSA -->
+            <div class="col-12 col-md-8">
+                <section class="caixa">
+
+                    <div class="chat-topo">
+                        <div class="avatar" id="avatarAtual"></div>
+                        <div>
+                            <strong id="nomeAtual"></strong><br>
+                            <small id="livroAtual"></small>
+                        </div>
+                    </div>
+
+                    <!-- o JavaScript coloca os balões aqui dentro -->
+                    <div class="mensagens" id="mensagens"></div>
+
+                    <form class="chat-form" id="formChat">
+                        <input type="text" id="campoMensagem" placeholder="Digite sua mensagem..." autocomplete="off">
+                        <button type="submit" class="btn-enviar"><i class="bi bi-send"></i> Enviar</button>
+                    </form>
+
+                </section>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="py-4 text-center">
+        <p>Sua próxima história pode estar na estante de alguém</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // ---------- 1) PEGAR OS ELEMENTOS DA PÁGINA ----------
+        const listaContatos = document.getElementById("listaContatos");
+        const areaMensagens = document.getElementById("mensagens");
+        const formChat = document.getElementById("formChat");
+        const campoMensagem = document.getElementById("campoMensagem");
+        const avatarAtual = document.getElementById("avatarAtual");
+        const nomeAtual = document.getElementById("nomeAtual");
+        const livroAtual = document.getElementById("livroAtual");
+
+        // ---------- 2) OS DADOS: uma lista de contatos ----------
+        // Cada contato tem seu próprio array de mensagens.
+        // "de" pode ser "eu" (você) ou "outro" (a outra pessoa).
+        const contatosPadrao = [
+            {
+                nome: "Ana Souza",
+                iniciais: "AS",
+                livro: "Troca: O Pequeno Príncipe",
+                mensagens: [
+                    { de: "outro", texto: "Olá! Aqui é a Ana. Que dia podemos marcar para entregar o livro?", hora: "12:01" },
+                    { de: "eu", texto: "Oi, Ana! Pode ser no dia 4 na biblioteca às 15:35?", hora: "12:03" }
+                ]
+            },
+            {
+                nome: "Lucas Pereira",
+                iniciais: "LP",
+                livro: "Troca: Dom Casmurro",
+                mensagens: [
+                    { de: "eu", texto: "Oi, Lucas! Enviei uma proposta de troca pelo Dom Casmurro.", hora: "09:20" },
+                    { de: "outro", texto: "Oi! Vi sim, vou analisar e te respondo hoje.", hora: "09:45" }
+                ]
+            },
+            {
+                nome: "Marina Costa",
+                iniciais: "MC",
+                livro: "Troca: Capitães da Areia",
+                mensagens: [
+                    { de: "outro", texto: "Obrigada pela troca! O livro está ótimo.", hora: "18:10" },
+                    { de: "eu", texto: "Por nada, Marina! Foi um prazer.", hora: "18:12" }
+                ]
+            }
+        ];
+
+        // Se já existir algo salvo no navegador, usa. Se não, usa a lista padrão.
+        let contatos = JSON.parse(localStorage.getItem("chatPoielContatos")) || contatosPadrao;
+
+        // Guarda qual contato está aberto agora (0 = o primeiro da lista)
+        let contatoAtual = 0;
+
+        // ---------- 3) DESENHAR A LISTA DE CONTATOS ----------
+        function mostrarContatos() {
+            listaContatos.innerHTML = "";
+
+            contatos.forEach(function (contato, indice) {
+                const item = document.createElement("div");
+                item.classList.add("contato");
+                if (indice === contatoAtual) {
+                    item.classList.add("ativo");      // destaca o contato aberto
+                }
+
+                const ultima = contato.mensagens[contato.mensagens.length - 1];
+                const previa = ultima ? ultima.texto : "Sem mensagens";
+
+                item.innerHTML =
+                    '<div class="avatar"></div>' +
+                    '<div class="info">' +
+                        '<div class="nome"></div>' +
+                        '<div class="previa"></div>' +
+                    '</div>';
+
+                // textContent é mais seguro que innerHTML para textos
+                item.querySelector(".avatar").textContent = contato.iniciais;
+                item.querySelector(".nome").textContent = contato.nome;
+                item.querySelector(".previa").textContent = previa;
+
+                // QUANDO CLICAR NO CONTATO: troca o contato atual e redesenha tudo
+                item.addEventListener("click", function () {
+                    contatoAtual = indice;
+                    mostrarContatos();
+                    mostrarConversa();
+                });
+
+                listaContatos.appendChild(item);
+            });
+        }
+
+        // ---------- 4) DESENHAR A CONVERSA DO CONTATO ATUAL ----------
+        function mostrarConversa() {
+            const contato = contatos[contatoAtual];
+
+            // cabeçalho
+            avatarAtual.textContent = contato.iniciais;
+            nomeAtual.textContent = contato.nome;
+            livroAtual.textContent = contato.livro;
+
+            // mensagens
+            areaMensagens.innerHTML = "";
+
+            contato.mensagens.forEach(function (msg) {
+                const balao = document.createElement("div");
+                balao.classList.add("balao");
+                balao.classList.add(msg.de === "eu" ? "minha" : "outro");
+
+                const texto = document.createElement("span");
+                texto.textContent = msg.texto;
+
+                const hora = document.createElement("small");
+                hora.textContent = msg.hora;
+
+                balao.appendChild(texto);
+                balao.appendChild(hora);
+                areaMensagens.appendChild(balao);
+            });
+
+            areaMensagens.scrollTop = areaMensagens.scrollHeight; // rola até a última
+        }
+
+        // ---------- 5) ENVIAR MENSAGEM (vai para o contato aberto) ----------
+        formChat.addEventListener("submit", function (evento) {
+            evento.preventDefault();
+
+            const texto = campoMensagem.value.trim();
+            if (texto === "") return;
+
+            const hora = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+
+            contatos[contatoAtual].mensagens.push({ de: "eu", texto: texto, hora: hora });
+            localStorage.setItem("chatPoielContatos", JSON.stringify(contatos));
+
+            campoMensagem.value = "";
+            campoMensagem.focus();
+
+            mostrarContatos();   // atualiza a prévia na lista
+            mostrarConversa();
+        });
+
+        // ---------- 6) AO ABRIR A PÁGINA ----------
+        mostrarContatos();
+        mostrarConversa();
+    </script>
 </body>
 </html>
