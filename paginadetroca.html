@@ -75,15 +75,19 @@
 
         /* "capa" do livro: um degradê verde com o título dentro */
         .capa-livro{
-            height: 110px;
-            display: flex;
-            align-items: flex-end;
-            padding: 12px 16px;
-            color: #ffffff;
-            font-weight: 600;
-            background: linear-gradient(135deg, var(--forest-sage), var(--light-sage));
+        background-color: #eaf1e4;
+        padding: 20px 0;
+        display: flex;
+        justify-content: center;
         }
 
+        .capa-livro img{
+            height: 220px;
+            aspect-ratio: 2 / 3;          /* proporção de capa de livro */
+            object-fit: cover;            /* não deforma a imagem */
+            border-radius: 6px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+        }
         .card-troca .corpo{
             padding: 16px 18px 18px;
         }
@@ -165,7 +169,6 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link active" href="paginaInicial.html">Principal</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="paginatroca.html">Troca</a></li>
                     <li class="nav-item"><a class="nav-link active" href="cadastrousuario.html">Cadastro</a></li>
                     <li class="nav-item"><a class="nav-link active" href="paginasobre.html">Sobre nós</a></li>
                 </ul>
@@ -202,7 +205,9 @@
             <!-- CARD 1 (copie este bloco inteiro para criar uma nova troca) -->
             <div class="col-12 col-md-6 col-lg-4">
                 <article class="card-troca">
-                    <div class="capa-livro">O Pequeno Príncipe</div>
+                    <div class="capa-livro">
+                        <img src="img/Pequeno_Príncipe.jpg" alt="Capa do livro O Pequeno Príncipe">
+                    </div>
                     <div class="corpo">
                         <span class="status status-combinada">Troca combinada</span>
                         <h2>O Pequeno Príncipe</h2>
@@ -225,7 +230,9 @@
             <!-- CARD 2 -->
             <div class="col-12 col-md-6 col-lg-4">
                 <article class="card-troca">
-                    <div class="capa-livro">Dom Casmurro</div>
+                    <div class="capa-livro">
+                        <img src="img/Dom_Casmurro.jpg" alt="Capa do livro Dom Casmurro">
+                    </div>
                     <div class="corpo">
                         <span class="status status-pendente">Aguardando resposta</span>
                         <h2>Dom Casmurro</h2>
@@ -244,7 +251,9 @@
             <!-- CARD 3 -->
             <div class="col-12 col-md-6 col-lg-4">
                 <article class="card-troca">
-                    <div class="capa-livro">Capitães da Areia</div>
+                    <div class="capa-livro">
+                        <img src="img/Capitaes_da_areia.jpg" alt="Capa do livro Capitães da Areia">
+                    </div>
                     <div class="corpo">
                         <span class="status status-concluida">Concluída</span>
                         <h2>Capitães da Areia</h2>
