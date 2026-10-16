@@ -1,4 +1,8 @@
 body{
+    margin: 0;
+    padding: p;
+}
+body{
     background-color: rgba(255, 145, 0, 0.548);
 }
 h1{
@@ -12,3 +16,29 @@ h2{
 footer{
     color: black;
 }
+nav ul li{
+    list-style: none;
+}
+.dropdown {
+    background-color: rgb(6, 167, 113);
+    padding: 10px;
+  }
+  
+  .dropdown-content {
+    background-color: rgb(6, 167, 113);
+    display: none;
+    position: absolute;
+    min-width: 50px;
+    margin-left: -10px;
+    border-radius: 10px;
+  }
+  .dropdown-content ul li{
+    margin-left: -30px;
+  }
+  .dropdown-content ul li a:link{
+    text-decoration: none;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
