@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diário de Cadastro de Livros para Troca</title>
+    <title>Cadastre seu livro!</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -77,6 +77,11 @@
         ::-webkit-scrollbar-thumb { background: #9cb6ad; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #4a5f5a; }
 
+        /* Select nativo escondido (mantém valor, validação e envio); a interface visual é o listbox personalizado */
+        .native-select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
+        select option:checked { background: #4a5f5a; color: #f4f3ee; }
+        select { accent-color: #4a5f5a; }
+
         /* ===== Gatos pixel art (extraídos da referência) ===== */
         .px { display: block; overflow: visible; shape-rendering: crispEdges; }
         /* todos os movimentos andam em pixels inteiros: nada borra */
@@ -114,7 +119,7 @@
     <!-- Header Section -->
     <header class="max-w-5xl mx-auto w-full text-center mb-32 relative pt-2">
         <h1 class="font-serif text-4xl sm:text-5xl font-bold text-botanical-900 tracking-tight">
-            Diário de Cadastro de Livros para Troca
+            Cadastre seu livro!
         </h1>
         <p class="text-botanical-600 mt-2 text-sm sm:text-base max-w-xl mx-auto">
             Cadastre os livros que você já leu ou não deseja mais manter e disponibilize-os para outros leitores, com foto da capa e da contracapa de cada obra.
@@ -339,6 +344,33 @@
                                 </div>
                             </div>
 
+                            <!-- 4. Estado de Conservação (Dropdown) -->
+                            <div>
+                                <label for="book-state" class="block text-xs font-bold uppercase tracking-wider text-botanical-800 mb-2">
+                                    Estado de Conservação *
+                                </label>
+                                <div class="relative">
+                                    <select 
+                                        id="book-state" 
+                                        required
+                                        class="w-full appearance-none px-4 py-3 pr-10 rounded-xl bg-botanical-50 border-2 border-botanical-200 focus:border-botanical-600 focus:ring-4 focus:ring-botanical-300/40 outline-none transition-all text-botanical-900 text-sm font-medium shadow-sm cursor-pointer"
+                                    >
+                                        <option value="" disabled selected>Selecione o estado do livro...</option>
+                                        <option value="Novo" data-desc="Livro sem sinais aparentes de uso.">Novo</option>
+                                        <option value="Excelente" data-desc="Livro usado, mas muito bem conservado, praticamente sem marcas de uso.">Excelente</option>
+                                        <option value="Bom" data-desc="Livro com sinais leves de uso, mas sem danos significativos.">Bom</option>
+                                        <option value="Regular" data-desc="Livro com marcas de uso mais visíveis, como desgastes, pequenas manchas ou dobras.">Regular</option>
+                                        <option value="Desgastado" data-desc="Livro com danos ou sinais de uso acentuados, mas ainda adequado para leitura.">Desgastado</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-botanical-600">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <p id="state-hint" class="text-xs text-botanical-600 mt-2 leading-snug" aria-live="polite">Escolha a opção que melhor descreve as condições físicas do livro.</p>
+                            </div>
+
                             <!-- Action Buttons -->
                             <div class="pt-3 flex flex-col sm:flex-row gap-3">
                                 <button 
@@ -435,6 +467,7 @@
                 title: 'Eu Sou um Gato',
                 author: 'Natsume Sōseki',
                 genre: 'Clássicos da Literatura',
+                state: 'Excelente',
                 frontCover: createDefaultCoverSVG('Eu Sou um Gato', 'Capa Frontal • Sōseki', '#e8e6df', '#4a5f5a'),
                 backCover: createDefaultCoverSVG('Sinopse na Contracapa', 'Verso • Edição Verde', '#f4f3ee', '#9cb6ad'),
                 showingBack: false
@@ -535,6 +568,16 @@
             (dataUrl) => { currentBackCover = dataUrl; }
         );
 
+        // Dica descritiva do estado de conservação
+        const stateSelect = document.getElementById('book-state');
+        const stateHint = document.getElementById('state-hint');
+        const defaultStateHint = 'Escolha a opção que melhor descreve as condições físicas do livro.';
+        function updateStateHint() {
+            const opt = stateSelect.options[stateSelect.selectedIndex];
+            stateHint.textContent = (opt && opt.dataset.desc) ? opt.dataset.desc : defaultStateHint;
+        }
+        stateSelect.addEventListener('change', updateStateHint);
+
         // Toast notification helper
         function showToast(title, message) {
             const toast = document.getElementById('toast');
@@ -549,6 +592,7 @@
         // Reset form and image previews
         function resetBookForm() {
             bookForm.reset();
+            updateStateHint();
             removeFrontBtn.click();
             removeBackBtn.click();
         }
@@ -565,8 +609,9 @@
             const title = document.getElementById('book-title').value.trim();
             const author = document.getElementById('book-author').value.trim();
             const genre = document.getElementById('book-genre').value;
+            const state = document.getElementById('book-state').value;
 
-            if (!title || !author || !genre) {
+            if (!title || !author || !genre || !state) {
                 showToast('Atenção', 'Por favor, preencha todos os campos obrigatórios.');
                 return;
             }
@@ -579,6 +624,7 @@
                 title,
                 author,
                 genre,
+                state,
                 frontCover: frontImg,
                 backCover: backImg,
                 showingBack: false
@@ -669,15 +715,172 @@
                                 <h3 class="font-serif text-xl font-bold text-botanical-900 leading-snug line-clamp-1">
                                     ${book.title}
                                 </h3>
-                                <p class="text-xs text-botanical-600 font-medium">
+                                <p class="text-xs text-botanical-600 font-medium mb-3">
                                     por ${book.author}
                                 </p>
+                                <div class="pt-2.5 border-t border-botanical-200/70 flex items-center justify-between gap-2 text-xs">
+                                    <span class="text-botanical-500 font-medium">Estado de conservação:</span>
+                                    <span class="font-semibold text-botanical-800 bg-botanical-50 px-2.5 py-1 rounded-lg border border-botanical-200">
+                                        ${book.state}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </article>
                 `;
             }).join('');
         }
+
+        // ===== Campos de seleção personalizados (acessíveis, na paleta do site) =====
+        function enhanceSelect(select, floating = false) {
+            const wrap = select.parentElement;
+            const label = document.querySelector(`label[for="${select.id}"]`);
+            if (label && !label.id) label.id = select.id + '-label';
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.id = select.id + '-button';
+            btn.className = select.className.replace('appearance-none', '') + ' text-left flex items-center';
+            btn.setAttribute('role', 'combobox');
+            btn.setAttribute('aria-haspopup', 'listbox');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.setAttribute('aria-controls', select.id + '-listbox');
+            if (label) btn.setAttribute('aria-labelledby', label.id + ' ' + btn.id);
+            if (select.required) btn.setAttribute('aria-required', 'true');
+            const btnText = document.createElement('span');
+            btnText.className = 'block truncate';
+            btn.appendChild(btnText);
+
+            const list = document.createElement('ul');
+            list.id = select.id + '-listbox';
+            list.setAttribute('role', 'listbox');
+            if (label) list.setAttribute('aria-labelledby', label.id);
+            list.hidden = true;
+            // Modo flutuante: o menu usa position:fixed para não ser cortado pelo overflow-hidden do livro
+            list.className = (floating ? 'fixed z-50 ' : 'absolute left-0 right-0 top-full mt-1.5 z-40 ') +
+                'max-h-64 overflow-auto rounded-xl bg-botanical-50 border-2 border-botanical-200 shadow-xl py-1';
+
+            const opts = [...select.options].filter(o => !o.disabled && o.value !== '');
+            const placeholder = select.options[0] ? select.options[0].textContent : '';
+            const check = '<svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
+            const items = opts.map((o, i) => {
+                const li = document.createElement('li');
+                li.id = `${select.id}-opt-${i}`;
+                li.setAttribute('role', 'option');
+                li.innerHTML = `<span><span class="block font-medium">${o.textContent}</span>` +
+                    (o.dataset.desc ? `<span class="block text-xs mt-0.5 font-normal">${o.dataset.desc}</span>` : '') +
+                    `</span><span class="chk">${check}</span>`;
+                li.addEventListener('mousemove', () => { if (active !== i) { active = i; paint(); } });
+                li.addEventListener('click', () => choose(i));
+                list.appendChild(li);
+                return li;
+            });
+
+            let active = -1, isOpen = false, typed = '', typedTimer;
+            const chevron = wrap.querySelector('svg');
+            if (chevron) chevron.classList.add('transition-transform', 'duration-200');
+
+            function selectedIndex() { return opts.findIndex(o => o.value === select.value); }
+            function paint() {
+                items.forEach((li, i) => {
+                    const sel = i === selectedIndex(), act = i === active;
+                    li.setAttribute('aria-selected', sel ? 'true' : 'false');
+                    const bg = sel ? (act ? 'bg-botanical-600' : 'bg-botanical-500') : (act ? 'bg-botanical-100' : '');
+                    li.className = `cursor-pointer px-4 py-2.5 text-sm flex items-start justify-between gap-3 ${bg} ` +
+                        (sel ? 'text-botanical-50 font-semibold ' : 'text-botanical-900 ') +
+                        (act ? 'ring-2 ring-inset ring-botanical-500' : '');
+                    li.querySelector('.chk').style.visibility = sel ? 'visible' : 'hidden';
+                });
+                if (isOpen && active >= 0) {
+                    btn.setAttribute('aria-activedescendant', items[active].id);
+                    items[active].scrollIntoView({ block: 'nearest' });
+                } else btn.removeAttribute('aria-activedescendant');
+            }
+            function sync() {
+                const idx = selectedIndex();
+                btnText.textContent = idx >= 0 ? opts[idx].textContent : placeholder;
+                btnText.classList.toggle('text-botanical-500', idx < 0);
+                paint();
+            }
+            // Posiciona o menu flutuante junto ao botão, abrindo para cima se faltar espaço embaixo
+            function place() {
+                if (!floating || !isOpen) return;
+                const r = btn.getBoundingClientRect(), gap = 6, margin = 12;
+                // largura primeiro: a altura do conteúdo depende dela (quebra de linha das descrições)
+                list.style.left = r.left + 'px';
+                list.style.width = r.width + 'px';
+                const keepScroll = list.scrollTop;
+                list.style.maxHeight = 'none';
+                const want = Math.min(list.scrollHeight + 4, 400); // +4 = bordas
+                const below = window.innerHeight - r.bottom - gap - margin;
+                const above = r.top - gap - margin;
+                const down = below >= want || below >= above;
+                const h = Math.max(Math.min(want, down ? below : above), 120);
+                list.style.maxHeight = h + 'px';
+                list.scrollTop = keepScroll;
+                if (down) { list.style.top = (r.bottom + gap) + 'px'; list.style.bottom = 'auto'; }
+                else { list.style.bottom = (window.innerHeight - r.top + gap) + 'px'; list.style.top = 'auto'; }
+            }
+            if (floating) {
+                window.addEventListener('resize', place);
+                window.addEventListener('scroll', (e) => { if (e.target !== list) place(); }, true); // rolar o próprio menu não reposiciona
+            }
+            function open() {
+                isOpen = true; list.hidden = false;
+                btn.setAttribute('aria-expanded', 'true');
+                btn.classList.add('border-botanical-600');
+                if (chevron) chevron.classList.add('rotate-180');
+                active = Math.max(selectedIndex(), 0); place(); paint();
+            }
+            function close() {
+                isOpen = false; list.hidden = true; active = -1;
+                btn.setAttribute('aria-expanded', 'false');
+                btn.classList.remove('border-botanical-600');
+                if (chevron) chevron.classList.remove('rotate-180');
+                paint();
+            }
+            function choose(i) {
+                select.value = opts[i].value;
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+                sync(); close(); btn.focus();
+            }
+
+            btn.addEventListener('click', () => (isOpen ? close() : open()));
+            btn.addEventListener('keydown', (e) => {
+                const k = e.key;
+                if (!isOpen) {
+                    if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(k)) { e.preventDefault(); open(); }
+                    return;
+                }
+                if (k === 'ArrowDown') { e.preventDefault(); active = Math.min(active + 1, items.length - 1); paint(); }
+                else if (k === 'ArrowUp') { e.preventDefault(); active = Math.max(active - 1, 0); paint(); }
+                else if (k === 'Home') { e.preventDefault(); active = 0; paint(); }
+                else if (k === 'End') { e.preventDefault(); active = items.length - 1; paint(); }
+                else if (k === 'Enter' || k === ' ') { e.preventDefault(); if (active >= 0) choose(active); }
+                else if (k === 'Escape') { e.preventDefault(); close(); }
+                else if (k === 'Tab') { close(); }
+                else if (k.length === 1) {
+                    typed += k.toLowerCase(); clearTimeout(typedTimer); typedTimer = setTimeout(() => typed = '', 600);
+                    const found = opts.findIndex(o => o.textContent.toLowerCase().startsWith(typed));
+                    if (found >= 0) { active = found; paint(); }
+                }
+            });
+            list.addEventListener('mousedown', (e) => e.preventDefault());
+            document.addEventListener('click', (e) => { if (isOpen && !wrap.contains(e.target)) close(); });
+            btn.addEventListener('blur', () => { if (isOpen) close(); });
+            if (label) label.addEventListener('click', (e) => { e.preventDefault(); btn.focus(); });
+            select.addEventListener('invalid', () => btn.focus());
+            select.addEventListener('change', sync);
+            if (select.form) select.form.addEventListener('reset', () => setTimeout(sync, 0));
+
+            select.className = 'native-select';
+            select.tabIndex = -1;
+            select.setAttribute('aria-hidden', 'true');
+            wrap.insertBefore(btn, select.nextSibling);
+            wrap.insertBefore(list, btn.nextSibling);
+            sync();
+        }
+        document.querySelectorAll('#book-form select').forEach(s => enhanceSelect(s, s.id === 'book-state'));
 
         // Initial render on page load
         window.addEventListener('DOMContentLoaded', () => {
