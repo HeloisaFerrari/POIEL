@@ -1,0 +1,32 @@
+.navbar{
+    background-color: var(--forest-sage);
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link,
+.navbar .nav-link.active{
+    color: #ffffff;
+}
+
+.navbar .nav-link:hover{
+    color: var(--sage);
+}
+
+.navbar-toggler{
+    border-color: rgba(255,255,255,0.6);
+}
+
+.navbar-toggler-icon{
+    filter: invert(1); /* ícone do menu mobile fica branco */
+
+}
+
+.card img{
+    height: 200px;
+    object-fit: cover;
+}
+
+footer{
+    background-color: black;
+    color: aliceblue;
+}

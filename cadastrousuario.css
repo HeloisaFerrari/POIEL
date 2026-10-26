@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ============ CORES ============ */
+:root{
+    --sage: #B5D19A;
+    --light-sage: #8DB873;
+    --moss-sage: #5F9A5A;
+    --olive-sage: #3F7F47;
+    --forest-sage: #1f582c;
+    --deep-sage: #1f582c;
+}
+
+/* ============ BASE ============ */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;          /* navbar em cima, footer embaixo */
+    background-image: url("img/teladecadastrousuario.png");
+    background-size: cover;
+    background-position: center;
+    background-color: var(--sage);
+}
+
+/* ============ NAVBAR ============ */
+.navbar-poiel{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;   /* era space-between */
+    flex-wrap: wrap;
+    gap: 40px;                     /* espaço entre o POIEL e os links */
+    padding: 14px 32px;
+    background-color: var(--forest-sage);
+}
+
+.navbar-poiel .marca{
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+
+.navbar-poiel .menu{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    list-style: none;
+}
+
+.navbar-poiel .menu a{
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 6px 0;
+    border-bottom: 2px solid transparent;
+    transition: 0.3s;
+}
+
+.navbar-poiel .menu a:hover,
+.navbar-poiel .menu a.ativa{
+    color: var(--sage);
+    border-bottom-color: var(--sage);
+}
+
+/* ============ CADASTRO ============ */
+.cadastro-center{
+    flex: 1;                          /* ocupa o espaço entre navbar e footer */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+}
+
+.container-cadastro{
+    width: 520px;
+    max-width: 100%;
+    padding: 28px 36px;
+    border: 2px solid var(--forest-sage);
+    border-radius: 10px;
+    color: var(--forest-sage);
+    box-shadow: 0 0 10px var(--olive-sage);
+    background-color: #eef1e8;
+}
+
+.container-cadastro h1{
+    font-size: 26px;
+    text-align: center;
+}
+
+.subtitulo{
+    text-align: center;
+    font-size: 13px;
+    margin: 4px 0 8px;
+    color: var(--moss-sage);
+}
+
+/* ---- campos ---- */
+.input-box{
+    position: relative;
+    width: 100%;
+    height: 44px;
+    margin: 14px 0;
+}
+
+.input-box input,
+.input-box select{
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: 2px solid var(--moss-sage);
+    border-radius: 40px;
+    outline: none;
+    font-size: 15px;
+    color: var(--deep-sage);
+    padding: 0 42px 0 18px;
+}
+
+.input-box input::placeholder{
+    color: var(--moss-sage);
+}
+
+.input-box input:focus,
+.input-box select:focus{
+    border-color: var(--olive-sage);
+    box-shadow: 0 0 6px var(--light-sage);
+}
+
+/* select com o mesmo visual dos inputs */
+.input-box select{
+    font-size: 14px;
+    padding-right: 38px;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    text-overflow: ellipsis;
+}
+
+.input-box select:invalid{
+    color: var(--moss-sage);          /* cor do "placeholder" */
+}
+
+.input-box select option{
+    color: var(--deep-sage);
+}
+
+.input-box i{
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: var(--olive-sage);
+    pointer-events: none;             /* o clique passa para o campo */
+}
+
+/* curso e módulo lado a lado */
+.linha-dupla{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0;
+}
+
+.linha-dupla .input-box{
+    margin: 0;                        /* o espaçamento vem do gap */
+}
+
+/* ---- mensagem de erro/sucesso ---- */
+.mensagem{
+    font-size: 14px;
+    text-align: center;
+    min-height: 20px;
+    margin-bottom: 6px;
+}
+.mensagem.erro{ color: #b3261e; }
+.mensagem.ok{ color: var(--olive-sage); }
+
+/* ---- botão ---- */
+.Cadastro{
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid var(--olive-sage);
+    background-color: var(--olive-sage);
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 0 8px var(--forest-sage);
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.Cadastro:hover{
+    background-color: transparent;
+    color: var(--forest-sage);
+}
+
+/* ---- link para o login ---- */
+.tem-conta{
+    text-align: center;
+    font-size: 14px;
+    margin-top: 14px;
+}
+
+.tem-conta a{
+    color: var(--olive-sage);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.tem-conta a:hover{
+    text-decoration: underline;
+}
+
+/* ============ FOOTER ============ */
+footer{
+    background-color: var(--deep-sage);
+    color: #ffffff;
+    text-align: center;
+    padding: 22px 16px;
+    font-size: 15px;
+}
+
+/* ============ CELULAR ============ */
+@media (max-width: 520px){
+    .navbar-poiel{ padding: 14px 18px; }
+    .navbar-poiel .menu{ gap: 18px; }
+    .container-cadastro{ padding: 24px 20px; }
+    .linha-dupla{ grid-template-columns: 1fr; }
+}
