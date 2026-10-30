@@ -1070,6 +1070,27 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Inter,sans-serif;back
 .sb-head{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--panel-2)}
 .avatar{width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:.9rem;flex-shrink:0;user-select:none}
 .sb-head .me-name{font-weight:600;font-size:.95rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me-email{display:block;font-size:.72rem;color:var(--text-muted);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-title{flex:1;min-width:0}
+.sb-empty{padding:24px 16px;font-size:.85rem;color:var(--text-muted);text-align:center}
+.conv-menu-btn{display:none;background:none;border:none;color:var(--text-muted);font-size:1.1rem;cursor:pointer;padding:0 4px;border-radius:6px}
+.conv:hover .conv-menu-btn,.conv:focus-within .conv-menu-btn{display:inline-block}
+.conv-ctx{position:absolute;right:12px;background:var(--panel);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:4px;z-index:6}
+.conv-ctx button{display:block;width:100%;text-align:left;background:none;border:none;color:var(--danger,#dc2626);padding:8px 12px;border-radius:6px;cursor:pointer;font:inherit;font-size:.88rem}
+.conv-ctx button:hover{background:var(--panel-2)}
+.conv.flash{animation:flashBg 1.2s ease}
+@keyframes flashBg{0%,100%{background:transparent}40%{background:var(--bubble-out)}}
+.modal-backdrop{position:fixed;inset:0;background:rgba(11,20,26,.5);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--panel);color:var(--text);border-radius:var(--radius-lg);box-shadow:var(--shadow);width:100%;max-width:400px;padding:22px;animation:fadeIn .2s ease}
+.modal h2{margin:0 0 14px;font-size:1.1rem}
+.modal label{display:block;font-size:.82rem;color:var(--text-muted);margin:10px 0 4px}
+.modal input{width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);font:inherit}
+.modal .field-error{color:#dc2626;font-size:.8rem;min-height:1.1em;margin-top:4px}
+.modal .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.modal button.btn-p{background:var(--accent);color:var(--accent-contrast);border:none;border-radius:999px;padding:9px 18px;cursor:pointer;font:inherit}
+.modal button.btn-p:disabled{opacity:.45;cursor:not-allowed}
+.modal button.btn-s{background:none;border:1px solid var(--border);color:var(--text);border-radius:999px;padding:9px 18px;cursor:pointer;font:inherit}
 .sb-search{padding:10px 12px;background:var(--panel)}
 .sb-search input{width:100%;padding:9px 14px;border-radius:999px;border:1px solid var(--border);background:var(--panel-2);color:var(--text);font:inherit;font-size:.9rem}
 .sb-search input:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -1148,7 +1169,8 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Inter,sans-serif;back
 <aside class="sidebar" aria-label="Lista de conversas">
 <div class="sb-head">
 <span class="avatar" id="meAvatar" style="background:#128c7e" aria-hidden="true">VC</span>
-<span class="me-name" id="meName">Você</span>
+<div class="sb-title"><span class="me-name" id="meName" style="display:block">Você</span><span class="me-email" id="meEmail"></span></div>
+<button class="icon-btn" id="newChatBtn" title="Nova conversa" aria-label="Nova conversa">+</button>
 <button class="icon-btn" id="renameBtn" title="Alterar meu nome" aria-label="Alterar meu nome">✎</button>
 </div>
 <div class="sb-search">
@@ -1157,6 +1179,20 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Inter,sans-serif;back
 <div class="sb-help">Abra esta página em outra janela para conversar em tempo real.</div>
 <ul class="conv-list" id="convList" role="listbox" aria-label="Conversas"></ul>
 </aside>
+<div class="modal-backdrop" id="newChatModal" role="dialog" aria-modal="true" aria-labelledby="newChatTitle">
+<form class="modal" id="newChatForm" novalidate>
+<h2 id="newChatTitle">Nova conversa</h2>
+<label for="newEmail">E-mail</label>
+<input type="email" id="newEmail" placeholder="email@exemplo.com" autocomplete="off" autofocus>
+<div class="field-error" id="emailError" role="alert"></div>
+<label for="newName">Como quer salvar este contato? (opcional)</label>
+<input type="text" id="newName" maxlength="24" placeholder="Apelido">
+<div class="actions">
+<button type="button" class="btn-s" id="newCancel">Cancelar</button>
+<button type="submit" class="btn-p" id="newSubmit" disabled>Adicionar</button>
+</div>
+</form>
+</div>
 <!-- MAIN -->
 <section class="main" id="mainPanel" aria-label="Conversa">
 <div class="main-empty" id="emptyState">
@@ -1200,6 +1236,9 @@ const PEOPLE = [
 const ME_KEY = "wa-demo-me";
 const THEME_KEY = "wa-demo-theme";
 const STATE_KEY = "wa-demo-state";
+const CONTACTS_KEY = "contacts";
+const MYEMAIL_KEY = "wa-demo-email";
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
 const EMOJIS = ["😀","😂","😍","👍","🙏","🎉","❤️","😎","🤔","👏","🔥","😅","🙌","☕","🚀","😴"];
 
 // Usuário atual: definido por aba (sessionStorage) para permitir duas janelas com usuários diferentes
@@ -1210,7 +1249,38 @@ sessionStorage.setItem(ME_KEY, me);
 }
 const myId = me;
 const myPerson = PEOPLE.find(p => p.id === myId);
-const others = PEOPLE.filter(p => p.id !== myId);
+/* E-mail do usuário: gerado uma vez e persistido */
+function genEmail() {
+const n = ["alex","rafa","lia","mel","tiago","nina","caio","bia"];
+return n[Math.floor(Math.random() * n.length)] + Math.floor(Math.random() * 900 + 100) + "@demo.local";
+}
+let myEmail = localStorage.getItem(MYEMAIL_KEY);
+if (!myEmail) { myEmail = genEmail(); localStorage.setItem(MYEMAIL_KEY, myEmail); }
+/* Contatos: lista de { email, name, addedAt } persistida */
+function normEmail(s) { return String(s || "").trim().toLowerCase(); }
+function loadContacts() {
+try { const r = JSON.parse(localStorage.getItem(CONTACTS_KEY) || "null"); if (Array.isArray(r)) return r; } catch (e) {}
+return [{ email: "bruno@demo.local", name: "Bruno Lima", addedAt: Date.now() - 86400000 }];
+}
+let contacts = loadContacts();
+function saveContacts() { try { localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts)); } catch (e) {} }
+/* Cor determinística pelo hash do e-mail */
+function hashStr(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
+function colorFor(email) { return "hsl(" + (hashStr(email) % 360) + ",55%,42%)"; }
+function emailInitials(email, name) {
+const base = name && name.trim() ? name.trim() : email.split("@")[0];
+return base.split(/[\s._-]+/).filter(Boolean).map(s => s[0]).slice(0, 2).join("").toUpperCase() || "?";
+}
+/* Lista de pessoas exibidas: contatos + pessoas de demonstração (sem duplicar o e-mail) */
+let others = [];
+function rebuildOthers() {
+const demo = PEOPLE.filter(p => p.id !== myId).map(p => ({ id: p.id, email: p.id + "@demo.local", name: p.name, color: p.color }));
+const fromContacts = contacts.map(c => ({ id: c.email, email: c.email, name: c.name || c.email.split("@")[0], color: colorFor(c.email) }));
+const seen = new Set();
+others = [];
+fromContacts.concat(demo).forEach(p => { if (!seen.has(p.email)) { seen.add(p.email); others.push(p); } });
+}
+rebuildOthers();
 
 /* ---------- Estado persistido (conversas) ---------- */
 function loadState() {
@@ -1267,7 +1337,7 @@ const tabId = Math.random().toString(36).slice(2);
 /* ---------- Presença ---------- */
 const presence = {}; // id -> { online, lastSeen, lastBeat }
 const typingFrom = {}; // id -> timestamp de último sinal de digitação
-let activeId = others[0].id;
+let activeId = others[0] ? others[0].id : null;
 
 function heartbeat() {
 send({ type: "hb", user: myId });
@@ -1325,7 +1395,7 @@ return arr[arr.length - 1];
 
 function sendMessage(text) {
 const clean = text.trim();
-if (!clean) return;
+if (!clean || !activeId) return;
 const msg = {
 id: Math.random().toString(36).slice(2, 10),
 from: myId,
@@ -1404,6 +1474,13 @@ return "lido";
 function renderConversations() {
 const q = ($("searchInput").value || "").trim().toLowerCase();
 convList.innerHTML = "";
+if (!others.length) {
+const em = document.createElement("li");
+em.className = "sb-empty";
+em.textContent = "Nenhum contato ainda. Clique em + para adicionar alguém pelo e-mail.";
+convList.append(em);
+return;
+}
 others
 .filter(p => !q || p.name.toLowerCase().includes(q))
 .forEach(p => {
@@ -1411,6 +1488,7 @@ const last = lastMessage(p.id);
 const unread = unreadCount(p.id);
 const li = document.createElement("li");
 li.className = "conv" + (p.id === activeId ? " active" : "");
+li.dataset.id = p.id;
 li.setAttribute("role", "option");
 li.setAttribute("aria-selected", p.id === activeId ? "true" : "false");
 li.tabIndex = 0;
@@ -1418,7 +1496,7 @@ li.tabIndex = 0;
 const av = document.createElement("span");
 av.className = "avatar";
 av.style.background = p.color;
-av.textContent = initials(p.name);
+av.textContent = emailInitials(p.email, p.name);
 
 const body = document.createElement("div");
 body.className = "conv-body";
@@ -1439,6 +1517,15 @@ const prev = document.createElement("span");
 prev.className = "conv-prev";
 prev.textContent = last ? (last.from === myId ? "Você: " : "") + last.text : "Nenhuma mensagem";
 bottom.append(prev);
+if (p.id.indexOf("@") > -1 && p.id !== p.id.split("@")[0]) {
+const menu = document.createElement("button");
+menu.type = "button";
+menu.className = "conv-menu-btn";
+menu.textContent = "⋮";
+menu.setAttribute("aria-label", "Opções do contato " + p.name);
+menu.addEventListener("click", e => { e.stopPropagation(); openCtxMenu(p.id, menu); });
+bottom.append(menu);
+}
 if (unread && p.id !== activeId) {
 const b = document.createElement("span");
 b.className = "badge-unread";
@@ -1456,11 +1543,11 @@ convList.append(li);
 }
 
 function renderHeader() {
-const p = PEOPLE.find(x => x.id === activeId);
+const p = others.find(x => x.id === activeId);
 if (!p) return;
 const av = $("peerAvatar");
 av.style.background = p.color;
-av.textContent = initials(p.name);
+av.textContent = emailInitials(p.email, p.name);
 $("peerName").textContent = p.name;
 const st = $("peerStatus");
 const info = presence[activeId];
@@ -1531,6 +1618,94 @@ renderMessages();
 }
 }
 
+/* Menu de contexto do contato: remover com confirmação */
+function openCtxMenu(peerId, anchor) {
+document.querySelectorAll(".conv-ctx").forEach(n => n.remove());
+const menu = document.createElement("div");
+menu.className = "conv-ctx";
+const b = document.createElement("button");
+b.type = "button";
+b.textContent = "Remover contato";
+b.addEventListener("click", () => {
+menu.remove();
+if (confirm("Remover este contato? As mensagens dele também serão apagadas.")) removeContact(peerId);
+});
+menu.append(b);
+anchor.closest(".conv").append(menu);
+setTimeout(() => document.addEventListener("click", () => menu.remove(), { once: true }), 0);
+}
+function removeContact(email) {
+contacts = contacts.filter(c => c.email !== email);
+saveContacts();
+state.messages = state.messages.filter(m => m.from !== email && m.to !== email);
+saveState();
+rebuildOthers();
+if (activeId === email) {
+activeId = others[0] ? others[0].id : null;
+if (!activeId) { app.classList.remove("chat-open"); $("chatArea").style.display = "none"; $("emptyState").style.display = "flex"; }
+}
+renderAll();
+if (window.skipUI) skipUI.toast("Contato removido", { type: "success" });
+}
+
+/* Modal "Nova conversa" */
+const modal = $("newChatModal");
+const newEmail = $("newEmail");
+const newName = $("newName");
+const newSubmit = $("newSubmit");
+const emailError = $("emailError");
+function openNewChat() {
+modal.classList.add("open");
+newEmail.value = ""; newName.value = ""; emailError.textContent = "";
+newSubmit.disabled = true;
+setTimeout(() => newEmail.focus(), 0);
+}
+function closeNewChat() { modal.classList.remove("open"); }
+/* Valida e devolve mensagem de erro (ou "" se válido) */
+function validateNewEmail() {
+const e = normEmail(newEmail.value);
+if (!e) return { ok: false, msg: "" };
+if (!EMAIL_RE.test(e)) return { ok: false, msg: "E-mail inválido" };
+if (e === normEmail(myEmail)) return { ok: false, msg: "Você não pode adicionar a si mesmo" };
+if (contacts.some(c => c.email === e)) return { ok: false, msg: "Este contato já está na sua lista" };
+return { ok: true, msg: "" };
+}
+newEmail.addEventListener("input", () => {
+const r = validateNewEmail();
+newSubmit.disabled = !r.ok;
+emailError.textContent = newEmail.value.trim() ? r.msg : "";
+});
+$("newChatBtn").addEventListener("click", openNewChat);
+$("newCancel").addEventListener("click", closeNewChat);
+modal.addEventListener("click", e => { if (e.target === modal) closeNewChat(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && modal.classList.contains("open")) closeNewChat(); });
+$("newChatForm").addEventListener("submit", e => {
+e.preventDefault();
+const r = validateNewEmail();
+if (!r.ok) { emailError.textContent = r.msg || "E-mail inválido"; return; }
+const email = normEmail(newEmail.value);
+const existing = others.find(p => p.id === email);
+if (existing && contacts.some(c => c.email === email)) { /* já existe: não duplica */ }
+addContact(email, newName.value.trim(), true);
+closeNewChat();
+});
+
+/* Adiciona contato e propaga "contact:add" para outras abas */
+function addContact(email, name, broadcast) {
+if (contacts.some(c => c.email === email)) return;
+contacts.push({ email, name: name || email.split("@")[0], addedAt: Date.now() });
+saveContacts();
+rebuildOthers();
+if (broadcast) send({ type: "contact:add", email: normEmail(myEmail), name: myPerson.name, to: email });
+renderAll();
+if (window.skipUI) skipUI.toast("Contato adicionado", { type: "success" });
+}
+/* Destaca conversa existente */
+function focusExisting(email) {
+const el = convList.querySelector('[data-id="' + CSS.escape(email) + '"]');
+if (el) { el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); el.scrollIntoView({ block: "nearest" }); }
+}
+
 function openChat(peerId) {
 activeId = peerId;
 $("emptyState").style.display = "none";
@@ -1548,6 +1723,12 @@ onBus(msg => {
 if (!msg || !msg.type) return;
 if (msg._tab === tabId) return; // ignora o próprio eco
 switch (msg.type) {
+case "contact:add": {
+if (msg.to !== myEmail) return;
+const from = normEmail(msg.email);
+if (!contacts.some(c => c.email === from)) addContact(from, msg.name, false);
+break;
+}
 case "hb": {
 const id = msg.user;
 const info = presence[id] || (presence[id] = {});
@@ -1697,9 +1878,10 @@ $("backBtn").addEventListener("click", () => app.classList.remove("chat-open"));
 
 /* Inicialização */
 $("meName").textContent = myPerson.name;
+$("meEmail").textContent = myEmail;
 const meAv = $("meAvatar");
-meAv.style.background = myPerson.color;
-meAv.textContent = initials(myPerson.name);
+meAv.style.background = colorFor(myEmail);
+meAv.textContent = emailInitials(myEmail, myPerson.name);
 renderConversations();
 notifyTitle();
 window.addEventListener("beforeunload", () => {
