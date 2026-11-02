@@ -9,8 +9,9 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@400;500;600;700...&family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="cadastroUsuario.css">
+    <link rel="stylesheet" href="../Páginas_CSS/global.css">
     <script>
         tailwind.config = {
             theme: {
@@ -32,6 +33,7 @@
     </script>
 
     <style>
+        
         :root { --c1:#314938; --c2:#4a5f5a; --c3:#9cb6ad; --c4:#e8e6df; --paper:#f4f3ee; }
         body {
             background-color: var(--c4);
@@ -82,6 +84,7 @@
         select option:checked { background: #4a5f5a; color: #f4f3ee; }
         select { accent-color: #4a5f5a; }
 
+
         /* ===== Gatos pixel art (extraídos da referência) ===== */
         .px { display: block; overflow: visible; shape-rendering: crispEdges; }
         /* todos os movimentos andam em pixels inteiros: nada borra */
@@ -106,7 +109,7 @@
         }
     </style>
 </head>
-<body class="text-botanical-900 font-sans antialiased min-h-screen flex flex-col justify-between py-6 px-3 sm:px-6 lg:px-10 overflow-x-hidden">
+<body class="text-botanical-900 font-sans antialiased min-h-screen flex flex-col overflow-x-hidden">
 
     <!-- Toast Notification -->
     <div id="toast" class="fixed top-5 right-5 z-50 transform transition-all duration-300 translate-y-[-150%] opacity-0 bg-botanical-800 text-botanical-50 px-5 py-3.5 rounded-2xl shadow-xl border-2 border-botanical-300">
@@ -115,7 +118,25 @@
             <p id="toast-msg" class="text-xs text-botanical-100">Adicionado à lista de livros para troca com sucesso.</p>
         </div>
     </div>
+  
 
+    <nav class="nav-poiel" aria-label="Navegação principal">
+        <div class="nav-conteudo">
+            <a class="nav-marca" href="index.html">POIEL</a>
+            <button class="nav-botao" id="nav-botao" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Principal</a></li>
+                <li><a href="paginadetroca.html">Minhas Trocas</a></li>
+                <li><a href="cadastrolivro.html">Cadastro Livro</a></li>
+                <li><a href="sobrenos.html">Sobre nós</a></li>
+                <li><a href="perfilusuario.html">Meu Perfil</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="flex-1 py-6 px-3 sm:px-6 lg:px-10">
     <!-- Header Section -->
     <header class="max-w-5xl mx-auto w-full text-center mb-32 relative pt-8 xl:pt-16 xl:mb-4">
         <h1 class="font-serif text-4xl sm:text-5xl font-bold text-botanical-900 tracking-tight">
@@ -432,10 +453,13 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="text-center text-xs text-botanical-600 py-4">
-        Feito com carinho, páginas de papel creme e ronronados literários.
-    </footer>
+        </div>
+
+    <footer class="footer-poiel">
+    <p>Sua próxima história pode estar na estante de alguém.</p>
+</footer>
+
+<script src="../JS/global.js"></script>
 
     <!-- Application JavaScript -->
     <script>

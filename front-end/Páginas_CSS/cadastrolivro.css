@@ -1,5 +1,69 @@
-div {
-    background-color: rgb(192, 184, 199);
-    text-align: center;
-    border-radius: 10px;
+:root { --c1:#314938; --c2:#4a5f5a; --c3:#9cb6ad; --c4:#e8e6df; --paper:#f4f3ee;
+        --sage:#B5D19A; --forest-sage:#2A5F36; --deep-sage:#1B4326; }
+
+body {
+    background-color: var(--c4);
+    background-image: radial-gradient(var(--c3) 1px, transparent 1.2px);
+    background-size: 26px 26px;
+}
+h1, h2, h3 { font-optical-sizing: auto; letter-spacing: -0.01em; }
+input::placeholder { color: rgba(74, 95, 90, 0.62) !important; }
+:focus-visible { outline: 2px solid var(--c2); outline-offset: 2px; }
+
+
+/* ===== LIVRO ABERTO ===== */
+.book-outer-cover {
+    background: linear-gradient(145deg, #4a5f5a, #314938);
+    padding: 14px; border-radius: 22px;
+    box-shadow: 0 26px 44px -16px rgba(49, 73, 56, 0.45), 0 0 0 2px #4a5f5a inset, 0 8px 0 #263a2c;
+    position: relative;
+}
+.book-pages-wrapper {
+    background-color: var(--paper); border-radius: 14px; position: relative;
+    box-shadow: inset 0 0 34px rgba(74, 95, 90, 0.14), 0 4px 0 #e8e6df, 0 8px 0 #9cb6ad;
+}
+.lined-paper {
+    background-image: linear-gradient(transparent 95%, rgba(156, 182, 173, 0.38) 95%);
+    background-size: 100% 2.1rem;
+}
+@media (min-width: 1024px) {
+    .book-spine {
+        position: absolute; top: 0; bottom: 0; left: 50%; width: 48px; transform: translateX(-50%);
+        background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(74,95,90,0.06) 30%, rgba(49,73,56,0.2) 48%,
+            rgba(244,243,238,0.75) 50%, rgba(49,73,56,0.17) 52%, rgba(74,95,90,0.05) 70%, rgba(0,0,0,0) 100%);
+        pointer-events: none; z-index: 20;
+    }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #e8e6df; }
+::-webkit-scrollbar-thumb { background: #9cb6ad; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #4a5f5a; }
+
+/* Select nativo escondido (mantém valor e validação); a interface é o listbox personalizado */
+.native-select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
+select option:checked { background: #4a5f5a; color: #f4f3ee; }
+select { accent-color: #4a5f5a; }
+
+/* ===== GATOS PIXEL ART ===== */
+.px { display: block; overflow: visible; shape-rendering: crispEdges; }
+@keyframes hd { 0% { transform: translateY(0); } 50% { transform: translateY(1px); } }
+.hd { animation: hd 3.4s step-end infinite; animation-delay: var(--bo, 0s); }
+@keyframes ea { 0% { transform: translateY(0); } 86% { transform: translateY(1px); } 90% { transform: translateY(0); } }
+.ea { animation: ea 6s step-end infinite; animation-delay: var(--bo, 0s); }
+.eb { animation: ea 6s step-end infinite; animation-delay: calc(var(--bo, 0s) - 2.7s); }
+@keyframes bl { 0% { opacity: 1; } 92% { opacity: 0; } 95% { opacity: 1; } }
+@keyframes bc { 0% { opacity: 0; } 92% { opacity: 1; } 95% { opacity: 0; } }
+.bl { animation: bl var(--bd, 5s) step-end infinite; animation-delay: var(--bo, 0s); }
+.bc { opacity: 0; animation: bc var(--bd, 5s) step-end infinite; animation-delay: var(--bo, 0s); }
+@keyframes tl { 0% { transform: translateX(0); } 25% { transform: translateX(-1px); } 50% { transform: translateX(0); } 75% { transform: translateX(1px); } }
+.tl { animation: tl 2.8s step-end infinite; animation-delay: var(--bo, 0s); }
+@keyframes sw { 0% { transform: translateX(0); } 50% { transform: translateX(1px); } }
+.sw { animation: sw 3s step-end infinite; }
+@keyframes sw2 { 0% { transform: translateY(0); } 50% { transform: translateY(1px); } }
+.sw2 { animation: sw2 3.6s step-end infinite; }
+@media (prefers-reduced-motion: reduce) {
+    .px g { animation: none !important; }
+    .bc { opacity: 0 !important; }
 }

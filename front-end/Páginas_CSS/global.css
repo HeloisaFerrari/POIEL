@@ -1,0 +1,46 @@
+/* ===== GLOBAL: navbar e footer iguais em todas as páginas do POIEL =====
+   Carregue SEMPRE por último no <head> (depois do Bootstrap/Tailwind e do CSS da página). */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    --poiel-nav: #2A5F36;
+    --poiel-footer: #1B4326;
+    --poiel-sage: #B5D19A;
+}
+
+/* Tira a margem padrão do navegador (era isso que deixava a navbar "solta" na página Sobre nós) */
+html, body { margin: 0; padding: 0; }
+
+/* ===== NAVBAR ===== */
+nav.nav-poiel, nav.nav-poiel * { box-sizing: border-box; font-family: "Poppins", sans-serif; }
+nav.nav-poiel { background-color: var(--poiel-nav); width: 100%; margin: 0; padding: 0; font-size: 16px; line-height: 1.5; }
+nav.nav-poiel .nav-conteudo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 12px 20px; margin: 0; }
+nav.nav-poiel .nav-marca { color: #fff; font-weight: 700; font-size: 20px; text-decoration: none; }
+nav.nav-poiel .nav-links { display: none; width: 100%; list-style: none; margin: 8px 0 0; padding: 0; }
+nav.nav-poiel .nav-links.aberto { display: block; }
+nav.nav-poiel .nav-links li { margin: 0; padding: 0; }
+nav.nav-poiel .nav-links a { display: block; color: #fff; font-size: 16px; font-weight: 400; text-decoration: none; padding: 8px 0; transition: color .3s; }
+nav.nav-poiel .nav-links a:hover { color: var(--poiel-sage); }
+nav.nav-poiel .nav-botao { background: none; border: 1px solid rgba(255,255,255,.6); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+nav.nav-poiel .nav-botao span { display: block; width: 22px; height: 2px; background: #fff; margin: 4px 0; }
+
+@media (min-width: 992px) {
+    nav.nav-poiel .nav-botao { display: none; }
+    nav.nav-poiel .nav-conteudo { flex-wrap: nowrap; justify-content: flex-start; gap: 28px; }
+    nav.nav-poiel .nav-links { display: flex; width: auto; margin: 0; gap: 22px; }
+    nav.nav-poiel .nav-links a { padding: 0; }
+}
+
+/* ===== FOOTER ===== */
+footer.footer-poiel {
+    background-color: var(--poiel-footer);
+    border-top: 3px solid var(--poiel-sage);
+    width: 100%;
+    margin: 0;
+    padding: 14px 24px;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+}
+footer.footer-poiel p { color: var(--poiel-sage); font-family: "Poppins", sans-serif; font-size: 13px; font-weight: 400; line-height: 1.5; margin: 0; padding: 0; }

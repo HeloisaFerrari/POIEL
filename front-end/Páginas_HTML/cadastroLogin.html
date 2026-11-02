@@ -12,50 +12,26 @@
     <script src="https://kit.fontawesome.com/YOUR_KIT_CODE.js" crossorigin="anonymous"></script>
     <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="cadastroLogin.css">
+    <link rel="stylesheet" href="../Páginas_CSS/cadastroLogin.css">
+    <link rel="stylesheet" href="../Páginas_CSS/global.css">
 </head>
 <body>
 
-     <nav  id="navBar" class="navbar navbar-expand-lg ">
-        <div class="container-fluid">
-
-            <a class="navbar-brand fw-bold" href="#">
-                POIEL
-            </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarTogglerDemo01"
-                aria-controls="navbarTogglerDemo01"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-                    <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Principal</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link active" href="paginadetroca.html">Minhas Trocas</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link active" href="cadastrousuario.html">Cadastro</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link active" href="sobrenós.html">Sobre nós</a>
-                    </li>
-                 </ul>
-
-            </div>
-        </div>
-    </nav>
+  <nav class="nav-poiel" aria-label="Navegação principal">
+    <div class="nav-conteudo">
+        <a class="nav-marca" href="index.html">POIEL</a>
+        <button class="nav-botao" id="nav-botao" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="index.html">Principal</a></li>
+            <li><a href="paginadetroca.html">Minhas Trocas</a></li>
+            <li><a href="cadastrousuario.html">Cadastro</a></li>
+            <li><a href="sobrenos.html">Sobre nós</a></li>
+             <li><a href="perfilusuario.html">Meu Perfil</a></li>
+        </ul>
+    </div>
+</nav>
 
    <div class="cadastro-center">
   <form class="container-cadastro" id="formLogin" novalidate>
@@ -89,10 +65,11 @@
     <p class="tem-conta">Ainda não tem conta? <a href="./cadastrousuario.html">Cadastre-se</a></p>
   </form>
 </div>
-    <footer class="py-4 text-center">
-        <p>Sua próxima história pode estar na estante de alguém!</p>
-    </footer>
- 
+    <footer class="footer-poiel">
+    <p>Sua próxima história pode estar na estante de alguém.</p>
+</footer>
+
+<script src="../JS/global.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin
     ="anonymous"></script>

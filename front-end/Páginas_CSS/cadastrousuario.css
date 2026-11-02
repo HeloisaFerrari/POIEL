@@ -22,7 +22,7 @@ body{
     min-height: 100vh;
     display: flex;
     flex-direction: column;          /* navbar em cima, footer embaixo */
-    background-image: url("img/teladecadastrousuario.png");
+    background-image: url("../img/teladecadastrousuario.png");
     background-size: cover;
     background-position: center;
     background-color: var(--sage);
