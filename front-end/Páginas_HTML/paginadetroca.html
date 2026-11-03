@@ -9,129 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../Páginas_CSS/global.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    <link rel="stylesheet" href="../Páginas_CSS/paginadetroca.css">
 
-      
-        :root{
-            --sage: #B5D19A;
-            --light-sage: #8DB873;
-            --moss-sage: #5F9A5A;
-            --olive-sage: #3F7F47;
-            --forest-sage: #2A5F36;
-            --deep-sage: #1B4326;
-            --fundo: #f4f7f0;      
-            --card: #ffffff;       
-        }
-
-        *{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
-        }
-
-        body{
-            min-height: 100vh;
-            background-color: var(--fundo);
-            color: var(--deep-sage);
-        }
-      
-        .titulo-pagina h1{
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--forest-sage);
-        }
-        .titulo-pagina p{
-            color: var(--moss-sage);
-        }
-
-       
-        .caixa-info{
-            background-color: #dcebd2;
-            border-radius: 14px;
-            padding: 18px 22px;
-            color: var(--forest-sage);
-        }
-
-       
-        .card-troca{
-            background-color: var(--card);
-            border: 1px solid #dfe8d8;
-            border-radius: 16px;
-            overflow: hidden;       
-        }
-
-        .capa-livro{
-        background-color: #eaf1e4;
-        padding: 20px 0;
-        display: flex;
-        justify-content: center;
-        }
-
-        .capa-livro img{
-            height: 220px;
-            aspect-ratio: 2 / 3;          /* proporção de capa de livro */
-            object-fit: cover;            /* não deforma a imagem */
-            border-radius: 6px;
-            box-shadow: 0 6px 14px rgba(0,0,0,0.25);
-        }
-        .card-troca .corpo{
-            padding: 16px 18px 18px;
-        }
-
-        .card-troca h2{
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--deep-sage);
-        }
-
-        .detalhes{
-            font-size: 14px;
-            color: var(--moss-sage);
-            margin-bottom: 6px;
-        }
-
-        .estrelas{ color: #c08a4a; }
-
- 
-        .status{
-            display: inline-block;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 3px 10px;
-            border-radius: 20px;
-            margin-bottom: 8px;
-        }
-        .status-pendente{  background-color: #fbefd5; color: #8a5a12; }
-        .status-combinada{ background-color: #dcebd2; color: var(--forest-sage); }
-        .status-concluida{ background-color: #e3e8e0; color: #4c5a4a; }
-
-
-        .btn-chat{
-            background-color: var(--olive-sage);
-            border: 2px solid var(--olive-sage);
-            color: #ffffff;
-            font-weight: 600;
-            border-radius: 10px;
-            transition: 0.4s;
-        }
-        .btn-chat:hover{
-            background-color: transparent;
-            color: var(--forest-sage);
-        }
-        .btn-avaliar{
-            background-color: #ffffff;
-            border: 1px solid #cddbc4;
-            color: var(--deep-sage);
-            font-weight: 600;
-            border-radius: 10px;
-        }
-        .btn-avaliar:hover{
-            background-color: var(--sage);
-        }
-
-    </style>
 </head>
 <body>
 
@@ -143,16 +22,18 @@
             <span></span><span></span><span></span>
         </button>
         <ul class="nav-links" id="nav-links">
-            <li><a href="index.html">Principal</a></li>
-            <li><a href="paginadetroca.html">Minhas Trocas</a></li>
-            <li><a href="cadastrolivro.html">Cadastro Livro</a></li>
+            <li><a href="index.html">Página principal</a></li>
+            <li><a href="paginadetroca.html" class="ativo">Minhas trocas</a></li>
+            <li><a href="cadastrolivro.html">Cadastrar livro</a></li>
+            <li><a href="chat.html">Chat</a></li>
             <li><a href="sobrenos.html">Sobre nós</a></li>
-            <li><a href="perfilusuario.html">Meu Perfil</a></li>
+            <li><a href="perfilusuario.html">Meu perfil</a></li>
         </ul>
+        <a class="nav-sair" href="cadastroLogin.html">Sair</a>
     </div>
 </nav>
 
-    <!-- CONTEÚDO PRINCIPAL -->
+    <!-- conteudo principal -->
     <main class="container py-5">
 
         <!-- Título -->
@@ -167,21 +48,21 @@
             Você escolhe um livro do seu acervo, envia uma proposta e aguarda a resposta do outro estudante.
         </div>
 
-        <!-- GRADE DE CARDS: row + col do Bootstrap
-             col-12 = 1 por linha no celular
-             col-md-6 = 2 por linha no tablet
-             col-lg-4 = 3 por linha no computador -->
-        <div class="row g-4">
 
-            <!-- CARD 1 (copie este bloco inteiro para criar uma nova troca) -->
+        <section class="secao" id="secao-andamento">
+            <h2 class="titulo-secao">Em andamento (2)</h2>     
+               <div class="row g-4">
+
+            <!-- card 1 -->
             <div class="col-12 col-md-6 col-lg-4">
                 <article class="card-troca">
                     <div class="capa-livro">
-                        <img src="img/Pequeno_Príncipe.jpg" alt="Capa do livro O Pequeno Príncipe">
+                        <img src="../img/Pequeno_Príncipe.jpg" alt="Capa do livro O Pequeno Príncipe">
                     </div>
                     <div class="corpo">
-                        <span class="status status-combinada">Troca combinada</span>
+                        <span class="status status-combinada">Troca aceita</span>
                         <h2>O Pequeno Príncipe</h2>
+                        <p class="detalhes"><i class="bi bi-arrow-left-right"></i> Você oferece este livro · recebe <strong>A Hora da Estrela</strong></p>
                         <p class="detalhes">Conversando com <strong>Ana Souza</strong></p>
                         <p class="detalhes">
                             <i class="bi bi-geo-alt-fill"></i> Biblioteca do IFSC ·
@@ -190,60 +71,121 @@
                         <p class="detalhes">
                             <span class="estrelas">★★★★★</span> 5,0 · 12 avaliações
                         </p>
-                        <div class="d-flex gap-2 mt-3">
-                            <button class="btn btn-chat"><i class="bi bi-chat-dots"></i> Chat</button>
-                            <button class="btn btn-avaliar">★ Avaliar troca</button>
+                         <div class="d-flex gap-2 mt-3">
+                            <button class="btn btn-chat" data-acao="chat"><i class="bi bi-chat-dots"></i> Abrir chat</button>
+                            <button class="btn btn-avaliar" data-acao="concluir">Marcar como concluída</button>
                         </div>
                     </div>
                 </article>
             </div>
 
-            <!-- CARD 2 -->
+            <!-- card 2 -->
             <div class="col-12 col-md-6 col-lg-4">
                 <article class="card-troca">
                     <div class="capa-livro">
-                        <img src="img/Dom_Casmurro.jpg" alt="Capa do livro Dom Casmurro">
+                        <img src="../img/Dom_Casmurro.jpg" alt="Capa do livro Dom Casmurro">
                     </div>
                     <div class="corpo">
-                        <span class="status status-pendente">Aguardando resposta</span>
+                        <span class="status status-pendente">Aguardando sua resposta</span>
+
                         <h2>Dom Casmurro</h2>
-                        <p class="detalhes">Proposta enviada para <strong>Lucas Pereira</strong></p>
+                        <p class="detalhes">Proposta recebida de <strong>Lucas Pereira</strong></p>
+                        <p class="detalhes"><i class="bi bi-arrow-left-right"></i> Em troca de: A Hora da Estrela</p>
                         <p class="detalhes">
-                            <i class="bi bi-arrow-left-right"></i> Em troca de: A Hora da Estrela
+                            <span class="estrelas">★★★★☆</span> 4,0 · 8 avaliações
                         </p>
-                        <div class="d-flex gap-2 mt-3">
-                            <button class="btn btn-chat"><i class="bi bi-chat-dots"></i> Chat</button>
-                            <button class="btn btn-avaliar">Cancelar proposta</button>
+                                               <div class="d-flex gap-2 mt-3">
+                            <button class="btn btn-chat" data-acao="aceitar">Aceitar</button>
+                            <button class="btn btn-avaliar" data-acao="recusar">Recusar</button>
+                            <button class="btn btn-avaliar" data-acao="chat"><i class="bi bi-chat-dots"></i> Abrir chat</button>
                         </div>
                     </div>
                 </article>
             </div>
+    <div class="vazio" id="vazio-andamento" hidden>
+        <p>Você ainda não tem trocas em andamento.</p>
+        <a href="index.html" class="btn btn-chat">Ir para a página principal</a>
+    </div>
+</section>
+
+<section class="secao" id="secao-aguardando">
+    <h2 class="titulo-secao">Aguardando match (1)</h2>
+    <div class="row g-4">
+
+        <!--card novo-->
+        <div class="col-12 col-md-6 col-lg-4">
+            <article class="card-troca">
+                <div class="capa-livro">
+                    <img src="../img/Capitaes_da_areia.jpg" alt="Capa do livro Capitães da Areia">
+                </div>
+                <div class="corpo">
+                    <span class="status status-aguardando">Aguardando match</span>
+                    <h2>Capitães da Areia</h2>
+                    <p class="detalhes"><i class="bi bi-calendar3"></i> Cadastrado em 30/10/2026</p>
+                    <div class="d-flex gap-2 mt-3">
+                        <button class="btn btn-chat" data-acao="editar"><i class="bi bi-pencil"></i> Editar</button>
+                        <button class="btn btn-avaliar" data-acao="remover"><i class="bi bi-trash"></i> Remover</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+    </div>
+    <div class="vazio" id="vazio-aguardando" hidden>
+        <p>Você ainda não tem livros aguardando match.</p>
+        <a href="index.html" class="btn btn-chat">Ir para a página principal</a>
+    </div>
+</section>
+
+<section class="secao" id="secao-finalizadas">
+    <h2 class="titulo-secao">Finalizadas (1)</h2>
+    <div class="row g-4">
 
             <!-- CARD 3 -->
             <div class="col-12 col-md-6 col-lg-4">
                 <article class="card-troca">
                     <div class="capa-livro">
-                        <img src="img/Capitaes_da_areia.jpg" alt="Capa do livro Capitães da Areia">
+                        <img src="../img/Capitaes_da_areia.jpg" alt="Capa do livro Capitães da Areia">
                     </div>
                     <div class="corpo">
                         <span class="status status-concluida">Concluída</span>
                         <h2>Capitães da Areia</h2>
                         <p class="detalhes">Troca feita com <strong>Marina Costa</strong></p>
+                        <p class="detalhes"><i class="bi bi-arrow-left-right"></i> Você deu este livro · recebeu <strong>Vidas Secas</strong></p>
+                        <p class="detalhes"><i class="bi bi-calendar-check"></i> Concluída em 20/10/2026</p>
                         <p class="detalhes">
                             <span class="estrelas">★★★★☆</span> 4,0 · 3 avaliações
                         </p>
-                        <div class="d-flex gap-2 mt-3">
-                            <button class="btn btn-avaliar">★ Avaliar troca</button>
+                                                <div class="d-flex gap-2 mt-3">
+                            <button class="btn btn-avaliar" data-acao="avaliar">★ Avaliar usuário</button>
                         </div>
                     </div>
                 </article>
             </div>
 
-        </div>
+        <div class="vazio" id="vazio-finalizadas" hidden>
+        <p>Você ainda não tem trocas finalizadas.</p>
+        <a href="index.html" class="btn btn-chat">Ir para a página principal</a>
+    </div>
+</section>
+
     </main>
 
     <footer class="footer-poiel">
-    <p>Sua próxima história pode estar na estante de alguém.</p>
+    <div class="footer-conteudo">
+        <div class="footer-marca">
+            <a href="index.html" class="footer-logo">POIEL</a>
+            <p>Troque livros, compartilhe histórias.</p>
+        </div>
+        <ul class="footer-links">
+            <li><a href="index.html">Página principal</a></li>
+            <li><a href="paginadetroca.html">Minhas trocas</a></li>
+            <li><a href="cadastrolivro.html">Cadastrar livro</a></li>
+            <li><a href="sobrenos.html">Sobre nós</a></li>
+        </ul>
+        <p class="footer-projeto">Projeto da Oficina de Integração · IFSC</p>
+    </div>
+    <p class="footer-direitos">© 2026 POIEL. Todos os direitos reservados.</p>
 </footer>
 
 <script src="../JS/global.js"></script>
