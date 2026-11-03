@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Perfil</title>
     <link rel="stylesheet" href="../Páginas_CSS/global.css">
+    <link rel="stylesheet" href="../Páginas_CSS/perfilusuario.css">
 </head>
 <body>
     <nav class="nav-poiel" aria-label="Navegação principal">
@@ -22,7 +23,150 @@
         </ul>
     </div>
 </nav>
+<main class="perfil-pagina">
+    <h1>Meu perfil</h1>
+    <p class="perfil-subtitulo">Veja seus dados, seus livros e seu histórico de trocas.</p>
 
+    <section class="perfil-aviso">
+        <strong>Dica</strong>
+        <p>Mantenha seus livros atualizados para que outros estudantes saibam o que você tem disponível para troca.</p>
+    </section>
+
+    <!-- Cartão com os dados do usuário -->
+    <section class="perfil-cartao" aria-label="Dados do usuário">
+        <div class="perfil-avatar" aria-hidden="true">MS</div>
+
+        <div class="perfil-info">
+            <h2>Maria Silva</h2>
+            <p><strong>Módulo:</strong> terceiro </p>
+            <p><strong>Curso técnico:</strong> TDS</p>
+            <p><strong>E-mail:</strong> maria.silva@email.com</p>
+            <p class="perfil-bio">"Amo romances e fantasia. Sempre procurando a próxima boa leitura!"</p>
+        </div>
+
+        <div class="perfil-botoes">
+            <a class="botao-verde" href="#">Editar perfil</a>
+            <a class="botao-contorno" href="cadastrolivro.html">Cadastrar livro</a>
+        </div>
+    </section>
+
+    <!-- Números do usuário -->
+    <section class="perfil-estatisticas" aria-label="Resumo">
+        <div class="estatistica">
+            <span>4</span>
+            <small>Livros cadastrados</small>
+        </div>
+        <div class="estatistica">
+            <span>7</span>
+            <small>Trocas realizadas</small>
+        </div>
+        <div class="estatistica">
+            <span>2</span>
+            <small>Propostas pendentes</small>
+        </div>
+    </section>
+
+    <!-- Livros do usuário -->
+    <section aria-labelledby="titulo-meus-livros">
+        <div class="secao-titulo">
+            <h2 id="titulo-meus-livros">Meus livros</h2>
+            <a class="botao-contorno" href="cadastrolivro.html">+ Adicionar</a>
+        </div>
+
+        <div class="livros-grade">
+            <article class="livro-card">
+                <div class="livro-capa-area">
+                    <div class="livro-capa">O Pequeno Príncipe</div>
+                </div>
+                <div class="livro-corpo">
+                    <h3>O Pequeno Príncipe</h3>
+                    <p class="livro-autor">Antoine de Saint-Exupéry</p>
+                    <div class="livro-etiquetas">
+                        <span class="etiqueta">Fábula</span>
+                        <span class="etiqueta disponivel">Disponível</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="livro-card">
+                <div class="livro-capa-area">
+                    <div class="livro-capa">Dom Casmurro</div>
+                </div>
+                <div class="livro-corpo">
+                    <h3>Dom Casmurro</h3>
+                    <p class="livro-autor">Machado de Assis</p>
+                    <div class="livro-etiquetas">
+                        <span class="etiqueta">Romance</span>
+                        <span class="etiqueta em-troca">Em troca</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="livro-card">
+                <div class="livro-capa-area">
+                    <div class="livro-capa">O Hobbit</div>
+                </div>
+                <div class="livro-corpo">
+                    <h3>O Hobbit</h3>
+                    <p class="livro-autor">J.R.R. Tolkien</p>
+                    <div class="livro-etiquetas">
+                        <span class="etiqueta">Fantasia</span>
+                        <span class="etiqueta disponivel">Disponível</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="livro-card">
+                <div class="livro-capa-area">
+                    <div class="livro-capa">A Hora da Estrela</div>
+                </div>
+                <div class="livro-corpo">
+                    <h3>A Hora da Estrela</h3>
+                    <p class="livro-autor">Clarice Lispector</p>
+                    <div class="livro-etiquetas">
+                        <span class="etiqueta">Romance</span>
+                        <span class="etiqueta disponivel">Disponível</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Lista de desejos -->
+    <section aria-labelledby="titulo-quero-ler">
+        <div class="secao-titulo">
+            <h2 id="titulo-quero-ler">Livros que quero ler</h2>
+        </div>
+
+        <div class="livros-grade">
+            <article class="livro-card">
+                <div class="livro-capa-area">
+                    <div class="livro-capa">Capitães da Areia</div>
+                </div>
+                <div class="livro-corpo">
+                    <h3>Capitães da Areia</h3>
+                    <p class="livro-autor">Jorge Amado</p>
+                    <div class="livro-etiquetas">
+                        <span class="etiqueta">Romance</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="livro-card">
+                <div class="livro-capa-area">
+                    <div class="livro-capa">Harry Potter e a Pedra Filosofal</div>
+                </div>
+                <div class="livro-corpo">
+                    <h3>Harry Potter e a Pedra Filosofal</h3>
+                    <p class="livro-autor">J.K. Rowling</p>
+                    <div class="livro-etiquetas">
+                        <span class="etiqueta">Fantasia</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
 <footer class="footer-poiel">
     <p>Sua próxima história pode estar na estante de alguém.</p>
 </footer>
