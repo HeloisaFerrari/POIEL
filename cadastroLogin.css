@@ -1,0 +1,335 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+/* Tipografia da identidade POIEL (mesma do cadastro de livros) */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+    :root{
+    /* variáveis originais da página (usadas também por navbar/rodapé): mantidas sem alteração */
+    --sage: #B5D19A;
+    --light-sage: #8DB873;
+    --moss-sage: #5F9A5A;
+    --olive-sage: #3F7F47;
+    --forest-sage: #1f582c;
+    --deep-sage:#1f582c;
+
+    /* paleta da identidade (igual ao cadastro de livros) */
+    --c1:#314938;     /* verde escuro: textos, botão */
+    --c2:#4a5f5a;     /* verde acinzentado: textos secundários, hover */
+    --c3:#9cb6ad;     /* verde claro: bordas, linhas */
+    --c4:#e8e6df;     /* bege: fundo da página */
+    --paper:#f4f3ee;  /* papel creme: cartão e campos */
+}
+
+    /* reset original: mantido, pois a navbar (global.css) depende dele */
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+
+    /* ===== FUNDO DA PÁGINA ===== */
+    /* mesma imagem de antes (caminho preservado); por baixo, o papel pontilhado do cadastro de livros */
+    body{
+        min-height: 100vh;
+        background-image: url("../img/teladecadastrousuario.png"), radial-gradient(var(--c3) 1px, transparent 1.2px);
+        background-size: cover, 26px 26px;
+        background-position: center, 0 0;
+        background-repeat: no-repeat, repeat;
+        background-color: var(--c4);
+    }
+
+    /* barra de rolagem na paleta */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--c4); }
+    ::-webkit-scrollbar-thumb { background: var(--c3); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--c2); }
+
+    .cadastro-center{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 24px 0;
+    }
+
+    /* ===== CARTÃO DE LOGIN: página de livro com capa dura ===== */
+    .container-cadastro{
+        width: min(340px, calc(100% - 56px));
+        padding: 18px 24px 18px;
+        border: 1px solid var(--c3);
+        border-radius: 14px;
+        color: var(--c1);
+        background-color: var(--paper);
+        /* pauta de caderno, igual à página II do cadastro de livros */
+        background-image: linear-gradient(transparent 95%, rgba(156, 182, 173, 0.38) 95%);
+        background-size: 100% 2.1rem;
+        box-shadow:
+            inset 0 0 34px rgba(74, 95, 90, 0.14),          /* sombra interna do papel */
+            0 0 0 9px #3b5242,                              /* capa */
+            0 0 0 11px var(--c2),                            /* friso da capa */
+            0 6px 0 11px #263a2c,                            /* espessura da capa */
+            0 20px 36px -2px rgba(49, 73, 56, 0.45);         /* sombra projetada */
+    }
+
+    /* tudo dentro do cartão usa a tipografia da identidade */
+    .container-cadastro,
+    .container-cadastro *{
+        font-family: "DM Sans", system-ui, sans-serif;
+    }
+
+    .container-cadastro :focus-visible{
+        outline: 2px solid var(--c2);
+        outline-offset: 2px;
+    }
+
+    /* cabeçalho do cartão: título + subtítulo, com filete como no topo das páginas do livro */
+    .container-cadastro .textos{
+        text-align: center;
+        padding-bottom: 10px;
+        margin-bottom: 2px;
+        border-bottom: 2px solid var(--c3);
+    }
+
+    .container-cadastro h1{
+        font-family: "Fraunces", Georgia, serif;
+        font-optical-sizing: auto;
+        letter-spacing: -0.01em;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.15;
+        text-align: center;
+        color: var(--c1);
+    }
+
+    .container-cadastro .subtitulo{
+        margin-top: 4px;
+        font-size: 12.5px;
+        line-height: 1.35;
+        color: var(--c2);
+    }
+
+    /* ===== CAMPOS ===== */
+    .input-box{
+        position: relative;
+        width: 100%;
+        height: 40px;
+        margin: 14px 0;
+    }
+
+    .input-box input{
+        width: 100%;
+        height: 100%;
+        background-color: var(--paper);
+        border: 2px solid var(--c3);
+        border-radius: 10px;
+        outline: none;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--c1);
+        padding: 8px 40px 8px 14px;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        transition: all 150ms ease;
+    }
+
+    .input-box input:focus{
+        border-color: var(--c1);
+        box-shadow: 0 0 0 4px rgba(156, 182, 173, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .input-box input::placeholder{
+        color: rgba(74, 95, 90, 0.62) !important;
+    }
+
+    .input-box i{
+        position: absolute;
+        right: 14px;
+        font-size: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--c2);
+        pointer-events: none;
+    }
+
+    /* ===== LEMBRAR / ESQUECI ===== */
+    .remember-forgot{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--c1);
+        margin: -4px 0 10px;
+    }
+
+    .remember-forgot label{
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .remember-forgot label input{
+        accent-color: var(--c2);
+        margin-right: 6px;
+    }
+
+    .remember-forgot a{
+        text-decoration: none;
+        font-weight: 600;
+        color: var(--c2);
+        transition: color 150ms ease;
+    }
+
+    .remember-forgot a:hover{
+        color: var(--c1);
+        text-decoration: underline;
+    }
+
+    /* ===== MENSAGEM (preenchida pelo JavaScript) ===== */
+    .mensagem{
+        text-align: center;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--c1);
+    }
+
+    .mensagem:not(:empty){
+        margin: 0 0 12px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 2px solid var(--c3);
+        background-color: var(--c4);
+    }
+
+    .mensagem.erro,
+    .mensagem.error{
+        color: #b35149;
+        border-color: #b35149;
+    }
+
+    .mensagem.sucesso,
+    .mensagem.success{
+        color: var(--c1);
+        border-color: var(--c2);
+    }
+
+    /* ===== BOTÃO PRINCIPAL ===== */
+    .Cadastro{
+        width: 100%;
+        padding: 10px 20px;
+        margin: 8px 0 6px;
+        border-radius: 10px;
+        border: 0;
+        background-color: var(--c1);
+        color: var(--paper);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 10px 15px -3px rgba(49, 73, 56, 0.25), 0 4px 6px -4px rgba(49, 73, 56, 0.25);
+        transition: all 150ms ease;
+    }
+
+    .Cadastro:hover{
+        background-color: var(--c2);
+        border: 0;
+        color: var(--paper);
+    }
+
+    .Cadastro:active{
+        transform: scale(0.99);
+    }
+
+    /* link com aparência de botão (usado em outras telas de cadastro) */
+    a.Cadastro{
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        margin: 8px 0 6px;
+    }
+
+    a.Cadastro:hover{
+        background-color: var(--c2);
+        border: 0;
+        color: var(--paper);
+    }
+
+    /* ===== RODAPÉ DO CARTÃO ===== */
+    .container-cadastro .tem-conta{
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid var(--c3);
+        text-align: center;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--c2);
+    }
+
+    .container-cadastro .tem-conta a{
+        font-weight: 700;
+        color: var(--c1);
+        text-decoration: none;
+        transition: color 150ms ease;
+    }
+
+    .container-cadastro .tem-conta a:hover{
+        color: var(--c2);
+        text-decoration: underline;
+    }
+
+    /* ===== TELAS PEQUENAS ===== */
+    @media (max-width: 480px){
+        .container-cadastro{
+            width: calc(100% - 48px);
+            padding: 16px 16px 16px;
+        }
+
+        .container-cadastro h1{
+            font-size: 22px;
+        }
+
+        .remember-forgot{
+            flex-wrap: wrap;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+        .Cadastro,
+        .input-box input,
+        .remember-forgot a,
+        .container-cadastro .tem-conta a{
+            transition: none;
+        }
+    }
+
+    /* ===== NAVBAR / RODAPÉ GLOBAL: regras originais mantidas SEM alteração ===== */
+    /* navbar com letras brancas */
+    .navbar{
+        background-color: var(--forest-sage);
+    }
+
+    .navbar .navbar-brand,
+    .navbar .nav-link,
+    .navbar .nav-link.active{
+        color: #ffffff;
+    }
+
+    .navbar .nav-link:hover{
+        color: var(--sage);
+    }
+
+    .navbar-toggler{
+        border-color: rgba(255,255,255,0.6);
+    }
+
+    .navbar-toggler-icon{
+        filter: invert(1); /* ícone do menu mobile fica branco */
+    }
+
+    footer{
+        background-color: var(--deep-sage);
+        font-size: larger;
+        color: #ffffff;
+    }
+    button{
+        margin: 10px;
+    }
