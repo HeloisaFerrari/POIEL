@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POIEL — Mensagens</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="chatstyle.css">
+  <link rel="stylesheet" href="../front-end/Páginas_CSS/global.css">
+</head>
+<body>
+
+    <nav class="nav-poiel" aria-label="Navegação principal">
+        <div class="nav-conteudo">
+            <a class="nav-marca" href="index.html">POIEL</a>
+            <button class="nav-botao" id="nav-botao" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="../front-end/Páginas_HTML/index.html">Principal</a></li>
+                <li><a href="../front-end/Páginas_HTML/cadastrousuario.html">Minhas Trocas</a></li>
+                <li><a href="../front-end/Páginas_HTML/cadastrolivro.html">Cadastro Livro</a></li>
+                <li><a href="../front-end/Páginas_HTML/sobrenos.html">Sobre nós</a></li>
+                 <li><a href="../front-end/Páginas_HTML/perfilusuario.html">Meu Perfil</a></li>
+            </ul>
+        </div>
+    </nav>
+
+  <!-- LOGIN / CADASTRO -->
+  <div id="auth-screen">
+    <div class="auth-card">
+      <div class="cat-logo">🐈</div>
+      <h1>Mensagens POIEL</h1>
+      <form id="form-login">
+        <input type="email" id="login-email" placeholder="Seu e-mail" required>
+        <input type="password" id="login-senha" placeholder="Senha" required>
+        <button type="submit" class="btn-verde">Entrar</button>
+      </form>
+      <form id="form-cadastro" hidden>
+        <input type="text" id="cad-nome" placeholder="Seu nome" required>
+        <input type="email" id="cad-email" placeholder="Seu e-mail" required>
+        <input type="password" id="cad-senha" placeholder="Senha (mín. 6 caracteres)" required minlength="6">
+        <button type="submit" class="btn-verde">Criar conta</button>
+      </form>
+      <a href="../front-end/Páginas_HTML/cadastrousuario.html">Não tem conta? Cadastre-se</a>
+      <p id="auth-erro" class="erro"></p>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="app" hidden>
+    <header>
+      <span class="logo">POIEL</span>
+      <span id="usuario-logado"></span>
+      <button id="btn-sair" class="btn-link">Sair</button>
+    </header>
+
+    <div class="layout">
+      <!-- Sidebar: contatos -->
+      <aside>
+        <form id="form-contato">
+          <input type="email" id="contato-email" placeholder="Adicionar por e-mail..." required>
+          <button type="submit" title="Adicionar">＋</button>
+        </form>
+        <ul id="lista-contatos"></ul>
+      </aside>
+
+      <!-- Chat -->
+      <main>
+        <div id="chat-cabecalho">Selecione um contato para conversar 🐾</div>
+        <div id="mensagens"></div>
+        <form id="form-msg" disabled>
+          <input type="text" id="campo-msg" placeholder="Mensagem..." autocomplete="off" disabled>
+          <button type="submit" disabled>➤</button>
+        </form>
+      </main>
+    </div>
+  </div>
+
+  <footer class="footer-poiel">
+    <p>Sua próxima história pode estar na estante de alguém.</p>
+</footer>
+
+  <!-- Firebase (SDK compat — mais simples de usar) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="chat.js"></script>
+</body>
+</html>
