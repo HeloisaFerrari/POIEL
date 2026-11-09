@@ -1,26 +1,37 @@
-const USUARIO_ID = 1;
- 
-        const livros = [
-            { id: 1,  titulo: "O Pequeno Príncipe", autor: "Antoine de Saint-Exupéry", genero: "Fantasia", estado: "Excelente", donoId: 2, dono: "Ana Souza", nota: 5.0, capa: "img/Pequeno_Príncipe.jpg", contracapa: "" },
-            { id: 2,  titulo: "Dom Casmurro", autor: "Machado de Assis", genero: "Romance", estado: "Bom", donoId: 3, dono: "Lucas Pereira", nota: 4.5, capa: "img/Dom_Casmurro.jpg", contracapa: "" },
-            { id: 3,  titulo: "Capitães da Areia", autor: "Jorge Amado", genero: "Drama", estado: "Regular", donoId: 4, dono: "Marina Costa", nota: 4.0, capa: "img/Capitaes_da_areia.jpg", contracapa: "" },
-            { id: 4,  titulo: "A Hora da Estrela", autor: "Clarice Lispector", genero: "Romance", estado: "Bom", donoId: 1, dono: "Você", nota: 4.8, capa: "", contracapa: "" },
-            { id: 5,  titulo: "O Hobbit", autor: "J. R. R. Tolkien", genero: "Fantasia", estado: "Excelente", donoId: 5, dono: "Pedro Lima", nota: 4.7, capa: "", contracapa: "" },
-            { id: 6,  titulo: "1984", autor: "George Orwell", genero: "Ficção científica", estado: "Bom", donoId: 2, dono: "Ana Souza", nota: 5.0, capa: "", contracapa: "" },
-            { id: 7,  titulo: "Frankenstein", autor: "Mary Shelley", genero: "Terror", estado: "Regular", donoId: 3, dono: "Lucas Pereira", nota: 4.5, capa: "", contracapa: "" },
-            { id: 8,  titulo: "Drácula", autor: "Bram Stoker", genero: "Terror", estado: "Bom", donoId: 4, dono: "Marina Costa", nota: 4.0, capa: "", contracapa: "" },
-            { id: 9,  titulo: "O Cão dos Baskervilles", autor: "Arthur Conan Doyle", genero: "Suspense", estado: "Excelente", donoId: 5, dono: "Pedro Lima", nota: 4.7, capa: "", contracapa: "" },
-            { id: 10, titulo: "A Ilha do Tesouro", autor: "Robert Louis Stevenson", genero: "Aventura", estado: "Novo", donoId: 2, dono: "Ana Souza", nota: 5.0, capa: "", contracapa: "" },
-            { id: 11, titulo: "O Conde de Monte Cristo", autor: "Alexandre Dumas", genero: "Aventura", estado: "Bom", donoId: 3, dono: "Lucas Pereira", nota: 4.5, capa: "", contracapa: "" },
-            { id: 12, titulo: "O Diário de Anne Frank", autor: "Anne Frank", genero: "Biografia", estado: "Excelente", donoId: 4, dono: "Marina Costa", nota: 4.0, capa: "", contracapa: "" },
-            { id: 13, titulo: "Os Miseráveis", autor: "Victor Hugo", genero: "Drama", estado: "Regular", donoId: 5, dono: "Pedro Lima", nota: 4.7, capa: "", contracapa: "" },
-            { id: 14, titulo: "Admirável Mundo Novo", autor: "Aldous Huxley", genero: "Ficção científica", estado: "Bom", donoId: 1, dono: "Você", nota: 4.8, capa: "", contracapa: "" },
-            { id: 15, titulo: "Orgulho e Preconceito", autor: "Jane Austen", genero: "Romance", estado: "Excelente", donoId: 2, dono: "Ana Souza", nota: 5.0, capa: "", contracapa: "" }
-        ];
- 
-        // Livros do usuário logado (os de "Minhas trocas"). Deixe [] para testar a mensagem de vazio.
-        const meusLivros = livros.filter(l => l.donoId === USUARIO_ID);
- 
+/* ===== LOGIN E CONEXÃO COM O BACK-END ===== */
+        const URL_API = "http://localhost:3000";
+        const tokenLogin = localStorage.getItem("token");
+        const usuarioLogado = JSON.parse(localStorage.getItem("usuario") || "null");
+        if(!tokenLogin || !usuarioLogado){
+            window.location.href = "cadastroLogin.html"; // sem login, volta para a página de login
+        }
+        const USUARIO_ID = usuarioLogado ? usuarioLogado.id : null;
+
+        // as duas listas vêm do banco (função carregarDados, lá embaixo)
+        let livros = [];
+        let meusLivros = []; // livros do usuário logado: aparecem no passo "Realizar troca"
+
+        async function chamarApi(rota, opcoes = {}){
+            const resposta = await fetch(`${URL_API}${rota}`, {
+                ...opcoes,
+                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + tokenLogin }
+            });
+            if(resposta.status === 401){
+                localStorage.removeItem("token");
+                window.location.href = "cadastroLogin.html";
+                throw new Error("Sessão expirada. Faça login novamente.");
+            }
+            const dados = await resposta.json();
+            if(!resposta.ok) throw new Error(dados.erro || "Erro no servidor");
+            return dados;
+        }
+
+        /* evita que um título com símbolos HTML quebre a página */
+        function escapeHtml(texto){
+            return String(texto).replace(/[&<>"']/g, c =>
+                ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+        }
+
         /* ===== ELEMENTOS ===== */
         const $ = id => document.getElementById(id);
         const grade = $("grade");
@@ -37,12 +48,13 @@ const USUARIO_ID = 1;
             return "★".repeat(cheias) + "☆".repeat(5 - cheias);
         }
  
-        function capaHTML(src, titulo, extra = ""){
-            const fallback = `<div class="capa-fallback ${extra}">${titulo}</div>`;
-            if(!src) return fallback;
-            return `<img src="${src}" alt="Capa do livro ${titulo}" onerror="this.outerHTML=this.dataset.fb" data-fb='${fallback.replace(/'/g, "&#39;")}'>`;
+        function capaHTML(src, titulo){
+            const t = escapeHtml(titulo);
+            if(!src) return `<div class="capa-fallback">${t}</div>`;
+            // se a imagem não carregar, troca por um quadro com o título
+            return `<img src="${escapeHtml(src)}" alt="Capa do livro ${t}" data-t="${t}" onerror="const d=document.createElement('div');d.className='capa-fallback';d.textContent=this.dataset.t;this.replaceWith(d)">`;
         }
- 
+
         /* ===== GÊNEROS ===== */
         function montarGeneros(){
             const lista = ["Todos", ...GENEROS];
@@ -75,14 +87,17 @@ const USUARIO_ID = 1;
 
             grade.innerHTML = daPagina.map(l => `
                 <button class="card-livro" data-id="${l.id}">
-                    <span class="badge-estado">${l.estado}</span>
+                    <span class="badge-estado">${escapeHtml(l.estado)}</span>
                     <div class="capa-livro">${capaHTML(l.capa, l.titulo)}</div>
                     <div class="corpo">
-                        <h3>${l.titulo}</h3>
-                        <p class="detalhes">${l.autor}</p>
+                        <h3>${escapeHtml(l.titulo)}</h3>
+                        <p class="detalhes">${escapeHtml(l.autor)}</p>
                     </div>
                 </button>`).join("");
 
+            $("semResultado").textContent = livros.length === 0
+                ? "Ainda não há livros cadastrados. Cadastre o primeiro!"
+                : "Nenhum livro encontrado. Tente outro nome ou gênero.";
             $("semResultado").classList.toggle("d-none", filtrados.length > 0);
             montarPaginacao(totalPaginas);
         }
@@ -159,7 +174,7 @@ const USUARIO_ID = 1;
             lista.innerHTML = meusLivros.map(l => `
                 <label class="livro-opcao">
                     <input type="radio" name="oferta" value="${l.id}">
-                    <span><strong>${l.titulo}</strong><br><small>${l.autor}</small></span>
+                    <span><strong>${escapeHtml(l.titulo)}</strong><br><small>${escapeHtml(l.autor)}</small></span>
                 </label>`).join("");
             $("semLivros").classList.toggle("d-none", meusLivros.length > 0);
             mostrarPasso("troca");
@@ -180,5 +195,30 @@ const USUARIO_ID = 1;
         });
  
         /* ===== INÍCIO ===== */
+        /* busca os livros no banco e desenha a página */
+        async function carregarDados(){
+            try{
+                const lista = await chamarApi("/livros");
+                livros = lista.map(l => ({
+                    id: l.id_livro,
+                    titulo: l.titulo,
+                    autor: l.autor,
+                    genero: l.genero,
+                    estado: l.estado_conservacao,
+                    donoId: l.id_usuario,
+                    dono: l.dono,
+                    nota: Number(l.avaliacao_dono) || 0,
+                    capa: l.capa_url || "",
+                    contracapa: l.contracapa_url || ""
+                }));
+                meusLivros = livros.filter(l => l.donoId === USUARIO_ID);
+            }catch(erro){
+                $("semResultado").textContent = "Não foi possível carregar os livros. O servidor está ligado?";
+                $("semResultado").classList.remove("d-none");
+                return;
+            }
+            montarGrade();
+        }
+
         montarGeneros();
-        montarGrade();
+        carregarDados();
