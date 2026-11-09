@@ -34,18 +34,18 @@
 
     <!-- Cartão com os dados do usuário -->
     <section class="perfil-cartao" aria-label="Dados do usuário">
-        <div class="perfil-avatar" aria-hidden="true">MS</div>
+        <div class="perfil-avatar" id="perfil-avatar" aria-hidden="true"></div>
 
         <div class="perfil-info">
-            <h2>Maria Silva</h2>
-            <p><strong>Módulo:</strong> terceiro </p>
-            <p><strong>Curso técnico:</strong> TDS</p>
-            <p><strong>E-mail:</strong> maria.silva@email.com</p>
-            <p class="perfil-bio">"Amo romances e fantasia. Sempre procurando a próxima boa leitura!"</p>
+            <h2 id="perfil-nome">Carregando...</h2>
+            <p><strong>Módulo:</strong> <span id="perfil-modulo"></span></p>
+            <p><strong>Curso técnico:</strong> <span id="perfil-curso"></span></p>
+            <p><strong>E-mail:</strong> <span id="perfil-email"></span></p>
+            <p class="perfil-bio" id="perfil-bio" hidden></p>
         </div>
 
         <div class="perfil-botoes">
-            <a class="botao-verde" href="#">Editar perfil</a>
+            <a class="botao-verde" href="#" id="btn-editar">Editar perfil</a>
             <a class="botao-contorno" href="cadastrolivro.html">Cadastrar livro</a>
         </div>
     </section>
@@ -53,15 +53,15 @@
     <!-- Números do usuário -->
     <section class="perfil-estatisticas" aria-label="Resumo">
         <div class="estatistica">
-            <span>4</span>
+            <span id="stat-livros">0</span>
             <small>Livros cadastrados</small>
         </div>
         <div class="estatistica">
-            <span>7</span>
+            <span>–</span>
             <small>Trocas realizadas</small>
         </div>
         <div class="estatistica">
-            <span>2</span>
+            <span>–</span>
             <small>Propostas pendentes</small>
         </div>
     </section>
@@ -73,67 +73,12 @@
             <a class="botao-contorno" href="cadastrolivro.html">+ Adicionar</a>
         </div>
 
-        <div class="livros-grade">
-            <article class="livro-card">
-                <div class="livro-capa-area">
-                    <div class="livro-capa">O Pequeno Príncipe</div>
-                </div>
-                <div class="livro-corpo">
-                    <h3>O Pequeno Príncipe</h3>
-                    <p class="livro-autor">Antoine de Saint-Exupéry</p>
-                    <div class="livro-etiquetas">
-                        <span class="etiqueta">Fábula</span>
-                        <span class="etiqueta disponivel">Disponível</span>
-                    </div>
-                </div>
-            </article>
-
-            <article class="livro-card">
-                <div class="livro-capa-area">
-                    <div class="livro-capa">Dom Casmurro</div>
-                </div>
-                <div class="livro-corpo">
-                    <h3>Dom Casmurro</h3>
-                    <p class="livro-autor">Machado de Assis</p>
-                    <div class="livro-etiquetas">
-                        <span class="etiqueta">Romance</span>
-                        <span class="etiqueta em-troca">Em troca</span>
-                    </div>
-                </div>
-            </article>
-
-            <article class="livro-card">
-                <div class="livro-capa-area">
-                    <div class="livro-capa">O Hobbit</div>
-                </div>
-                <div class="livro-corpo">
-                    <h3>O Hobbit</h3>
-                    <p class="livro-autor">J.R.R. Tolkien</p>
-                    <div class="livro-etiquetas">
-                        <span class="etiqueta">Fantasia</span>
-                        <span class="etiqueta disponivel">Disponível</span>
-                    </div>
-                </div>
-            </article>
-
-            <article class="livro-card">
-                <div class="livro-capa-area">
-                    <div class="livro-capa">A Hora da Estrela</div>
-                </div>
-                <div class="livro-corpo">
-                    <h3>A Hora da Estrela</h3>
-                    <p class="livro-autor">Clarice Lispector</p>
-                    <div class="livro-etiquetas">
-                        <span class="etiqueta">Romance</span>
-                        <span class="etiqueta disponivel">Disponível</span>
-                    </div>
-                </div>
-            </article>
-        </div>
+        <div class="livros-grade" id="meus-livros-grade"></div>
     </section>
 
     <!-- Lista de desejos -->
-    <section aria-labelledby="titulo-quero-ler">
+    <!-- Escondida até existir a tabela de lista de desejos no banco -->
+    <section aria-labelledby="titulo-quero-ler" hidden>
         <div class="secao-titulo">
             <h2 id="titulo-quero-ler">Livros que quero ler</h2>
         </div>
@@ -167,10 +112,55 @@
         </div>
     </section>
 </main>
+<!-- Janela de edição do perfil -->
+<dialog class="dialogo-perfil" id="dialogo-editar" aria-labelledby="titulo-editar">
+    <form id="form-editar">
+        <h2 id="titulo-editar">Editar perfil</h2>
+
+        <div class="editar-foto">
+            <div class="editar-foto-previa" id="foto-previa"></div>
+            <div class="editar-foto-acoes">
+                <label class="botao-contorno" for="foto-arquivo">Escolher foto</label>
+                <input type="file" id="foto-arquivo" accept="image/*" hidden>
+                <button type="button" class="botao-contorno" id="foto-remover">Remover foto</button>
+            </div>
+        </div>
+
+        <div>
+            <label class="campo" for="edit-modulo">Módulo</label>
+            <select id="edit-modulo">
+                <option>1º módulo</option>
+                <option>2º módulo</option>
+                <option>3º módulo</option>
+                <option>4º módulo</option>
+                <option>5º módulo</option>
+                <option>6º módulo</option>
+                <option>7º módulo</option>
+                <option>8º módulo</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="campo" for="edit-bio">Sobre você</label>
+            <textarea id="edit-bio" rows="3" maxlength="200" placeholder="Ex.: Amo romances e fantasia. Sempre procurando a próxima boa leitura!"></textarea>
+            <small id="bio-contador">0/200</small>
+        </div>
+
+        <p class="editar-aviso">Nome, e-mail, matrícula e curso não podem ser alterados por aqui.</p>
+        <p class="editar-msg" id="editar-msg" role="status"></p>
+
+        <div class="editar-botoes">
+            <button type="button" class="botao-contorno" id="btn-cancelar">Cancelar</button>
+            <button type="submit" class="botao-verde" id="btn-salvar">Salvar</button>
+        </div>
+    </form>
+</dialog>
+
 <footer class="footer-poiel">
     <p>Sua próxima história pode estar na estante de alguém.</p>
 </footer>
 
 <script src="../JS/global.js"></script>
+<script src="../JS/perfilusuario.js"></script>
 </body>
 </html>
