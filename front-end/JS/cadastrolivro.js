@@ -1,3 +1,52 @@
+/* ===== CONEXÃO COM O BACK-END ===== */
+const URL_API = 'http://localhost:3000';
+const tokenLogin = localStorage.getItem('token');
+if (!tokenLogin) {
+    window.location.href = 'cadastroLogin.html'; // sem login, volta para a página de login
+}
+
+async function chamarApi(rota, opcoes = {}) {
+    const resposta = await fetch(`${URL_API}${rota}`, {
+        ...opcoes,
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tokenLogin }
+    });
+    if (resposta.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = 'cadastroLogin.html';
+        throw new Error('Sessão expirada. Faça login novamente.');
+    }
+    const dados = await resposta.json();
+    if (!resposta.ok) throw new Error(dados.erro || 'Erro no servidor');
+    return dados;
+}
+
+/* evita que um título com símbolos HTML quebre a página */
+function escapeHtml(texto) {
+    return String(texto).replace(/[&<>"']/g, (c) =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+/* reduz a imagem antes de enviar, para o banco não ficar pesado */
+function comprimirImagem(dataUrl, ladoMaximo = 700) {
+    return new Promise((resolve) => {
+        if (!dataUrl) return resolve(null);
+        const img = new Image();
+        img.onload = () => {
+            const escala = Math.min(1, ladoMaximo / Math.max(img.width, img.height));
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(img.width * escala);
+            canvas.height = Math.round(img.height * escala);
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL('image/jpeg', 0.75));
+        };
+        img.onerror = () => resolve(null);
+        img.src = dataUrl;
+    });
+}
+
 /* ===== NAVBAR (menu no celular) ===== */
 const navBotao = document.getElementById('nav-botao');
 const navLinks = document.getElementById('nav-links');
@@ -26,19 +75,7 @@ function createDefaultCoverSVG(title, subtitle, bgHex, accentHex) {
     return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
 }
 
-/* Livro de exemplo. Quando o back-end estiver pronto, esta lista virá do banco (tabela livro). */
-const registeredBooks = [
-    {
-        id: 1,
-        title: 'Eu Sou um Gato',
-        author: 'Natsume Sōseki',
-        genre: 'Clássicos da Literatura',
-        state: 'Excelente',
-        frontCover: createDefaultCoverSVG('Eu Sou um Gato', 'Capa Frontal • Sōseki', '#e8e6df', '#4a5f5a'),
-        backCover: createDefaultCoverSVG('Sinopse na Contracapa', 'Verso • Edição Verde', '#f4f3ee', '#9cb6ad'),
-        showingBack: false
-    }
-];
+let registeredBooks = []; // preenchida pelo back-end (rota /meus-livros)
 
 /* ===== ELEMENTOS ===== */
 const frontDropzone = document.getElementById('front-dropzone');
@@ -147,7 +184,7 @@ clearFormBtn.addEventListener('click', () => {
     showToast('Página Limpa', 'Os campos foram reiniciados.');
 });
 
-bookForm.addEventListener('submit', (e) => {
+bookForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const title = document.getElementById('book-title').value.trim();
@@ -160,19 +197,23 @@ bookForm.addEventListener('submit', (e) => {
         return;
     }
 
-    const newBook = {
-        id: Date.now(),
-        title, author, genre, state,
-        frontCover: currentFrontCover || createDefaultCoverSVG(title, 'Capa Frontal • ' + author, '#e8e6df', '#4a5f5a'),
-        backCover: currentBackCover || createDefaultCoverSVG(title, 'Contracapa • ' + genre, '#f4f3ee', '#9cb6ad'),
-        showingBack: false
-    };
+    try {
+        const [capa, contracapa] = await Promise.all([
+            comprimirImagem(currentFrontCover),
+            comprimirImagem(currentBackCover)
+        ]);
 
-    /* Aqui o back-end deve salvar o livro (POST na tabela livro). */
-    registeredBooks.unshift(newBook);
-    renderBookshelf();
-    resetBookForm();
-    showToast('Livro Cadastrado!', `"${title}" foi adicionado à lista de livros para troca.`);
+        await chamarApi('/livros', {
+            method: 'POST',
+            body: JSON.stringify({ titulo: title, autor: author, genero: genre, estado: state, capa, contracapa })
+        });
+
+        resetBookForm();
+        await carregarLivros();
+        showToast('Livro Cadastrado!', `"${title}" foi adicionado à lista de livros para troca.`);
+    } catch (erro) {
+        showToast('Erro', erro.message);
+    }
 });
 
 /* ===== LISTA DE LIVROS ===== */
@@ -184,14 +225,37 @@ window.toggleBookCover = function (bookId) {
     }
 };
 
-window.deleteBook = function (bookId) {
-    const idx = registeredBooks.findIndex(b => b.id === bookId);
-    if (idx !== -1) {
-        const removed = registeredBooks.splice(idx, 1)[0];
-        renderBookshelf();
-        showToast('Livro Removido', `"${removed.title}" foi removido da lista de troca.`);
+window.deleteBook = async function (bookId) {
+    const livro = registeredBooks.find(b => b.id === bookId);
+    if (!livro) return;
+    try {
+        await chamarApi('/livros/' + bookId, { method: 'DELETE' });
+        await carregarLivros();
+        showToast('Livro Removido', `"${livro.title}" foi removido da lista de troca.`);
+    } catch (erro) {
+        showToast('Erro', erro.message);
     }
 };
+
+/* busca os livros de quem está logado e desenha a estante */
+async function carregarLivros() {
+    try {
+        const livros = await chamarApi('/meus-livros');
+        registeredBooks = livros.map(l => ({
+            id: l.id_livro,
+            title: l.titulo,
+            author: l.autor,
+            genre: l.genero,
+            state: l.estado_conservacao,
+            frontCover: l.capa_url || createDefaultCoverSVG(l.titulo, 'Capa Frontal • ' + l.autor, '#e8e6df', '#4a5f5a'),
+            backCover: l.contracapa_url || createDefaultCoverSVG(l.titulo, 'Contracapa • ' + l.genero, '#f4f3ee', '#9cb6ad'),
+            showingBack: false
+        }));
+    } catch (erro) {
+        showToast('Erro', erro.message);
+    }
+    renderBookshelf();
+}
 
 function renderBookshelf() {
     booksCountEl.textContent = registeredBooks.length;
@@ -213,7 +277,7 @@ function renderBookshelf() {
             <article class="bg-paper rounded-2xl border-2 border-botanical-200 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col justify-between group">
                 <div>
                     <div class="relative aspect-[3/4] w-full bg-botanical-100 overflow-hidden border-b border-botanical-200">
-                        <img src="${activeImage}" alt="Imagem de ${book.title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                        <img src="${activeImage}" alt="Imagem de ${escapeHtml(book.title)}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                         <span class="absolute top-3 left-3 bg-botanical-900/80 backdrop-blur-sm text-botanical-50 text-[11px] font-semibold px-3 py-1 rounded-full">${badgeLabel}</span>
                         <button type="button" onclick="toggleBookCover(${book.id})"
                             class="absolute bottom-3 right-3 bg-botanical-50/95 hover:bg-botanical-600 hover:text-botanical-50 text-botanical-900 text-xs font-bold px-3.5 py-2 rounded-xl shadow-md border border-botanical-300 transition-colors cursor-pointer">
@@ -222,14 +286,14 @@ function renderBookshelf() {
                     </div>
                     <div class="p-4">
                         <div class="flex items-center justify-between gap-2 mb-1.5">
-                            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-botanical-100 text-botanical-700">${book.genre}</span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-botanical-100 text-botanical-700">${escapeHtml(book.genre)}</span>
                             <button type="button" onclick="deleteBook(${book.id})" class="text-botanical-500 hover:underline text-xs font-medium p-1 transition-colors cursor-pointer" title="Remover livro">Remover</button>
                         </div>
-                        <h3 class="font-serif text-xl font-bold text-botanical-900 leading-snug line-clamp-1">${book.title}</h3>
-                        <p class="text-xs text-botanical-600 font-medium mb-3">por ${book.author}</p>
+                        <h3 class="font-serif text-xl font-bold text-botanical-900 leading-snug line-clamp-1">${escapeHtml(book.title)}</h3>
+                        <p class="text-xs text-botanical-600 font-medium mb-3">por ${escapeHtml(book.author)}</p>
                         <div class="pt-2.5 border-t border-botanical-200/70 flex items-center justify-between gap-2 text-xs">
                             <span class="text-botanical-500 font-medium">Estado de conservação:</span>
-                            <span class="font-semibold text-botanical-800 bg-botanical-50 px-2.5 py-1 rounded-lg border border-botanical-200">${book.state}</span>
+                            <span class="font-semibold text-botanical-800 bg-botanical-50 px-2.5 py-1 rounded-lg border border-botanical-200">${escapeHtml(book.state)}</span>
                         </div>
                     </div>
                 </div>
@@ -394,4 +458,4 @@ function enhanceSelect(select, floating = false) {
 document.querySelectorAll('#book-form select').forEach(s => enhanceSelect(s, s.id === 'book-state'));
 
 /* ===== INÍCIO ===== */
-renderBookshelf();
+carregarLivros();

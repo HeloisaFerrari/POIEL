@@ -9,7 +9,7 @@ form.addEventListener("submit", async (e) => {
   const senha = document.getElementById("inputSenha").value;
   const confirma = document.getElementById("inputConfirmaSenha").value;
 
-  if (!form.checkValidity()) {
+  if (!form.reportValidity()) {
     msg.textContent = "Preencha todos os campos corretamente.";
     msg.className = "mensagem erro";
     return;
