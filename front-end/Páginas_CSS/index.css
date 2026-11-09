@@ -1,4 +1,4 @@
-     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
  
         :root{
             --sage: #B5D19A;
@@ -53,50 +53,40 @@
         .chip:hover{ background-color: var(--sage); }
         .chip.ativo{ background-color: var(--olive-sage); border-color: var(--olive-sage); color: #ffffff; }
  
-        /* CARROSSEL */
-        .carrossel-area{ position: relative; }
-        .carrossel{
-            display: flex;
+        /* GRADE DE LIVROS (linhas e colunas) */
+        .grade-livros{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
             gap: 20px;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            padding: 6px 4px 14px;
-            scrollbar-width: none;
         }
-        .carrossel::-webkit-scrollbar{ display: none; }
- 
-        .seta{
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 42px; height: 42px;
-            border-radius: 50%;
-            border: none;
-            background-color: var(--forest-sage);
-            color: #ffffff;
-            z-index: 2;
-            transition: 0.3s;
-        }
-        .seta:hover{ background-color: var(--olive-sage); }
-        .seta-esq{ left: -18px; }
-        .seta-dir{ right: -18px; }
- 
+
         /* CARD DE LIVRO (mesmo estilo do card-troca) */
         .card-livro{
-            flex: 0 0 200px;
-            scroll-snap-align: start;
+            position: relative;
             background-color: var(--card);
             border: 1px solid #dfe8d8;
             border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
-            text-align: left;
+            text-align: center;
             padding: 0;
             transition: 0.3s;
         }
         .card-livro:hover{ border-color: var(--light-sage); transform: translateY(-3px); }
- 
+
+        /* etiqueta com o estado de conservação, no canto da capa */
+        .badge-estado{
+            position: absolute;
+            top: 10px; right: 10px;
+            z-index: 1;
+            background-color: var(--deep-sage);
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+
         .capa-livro{
             background-color: #eaf1e4;
             padding: 18px 0;
@@ -117,10 +107,36 @@
             font-size: 13px; font-weight: 600; color: var(--forest-sage);
         }
         .card-livro .corpo{ padding: 12px 14px 14px; }
-        .card-livro h3{ font-size: 16px; font-weight: 700; color: var(--deep-sage); }
+        .card-livro h3{
+            font-size: 16px; font-weight: 700; color: var(--deep-sage);
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; min-height: 2.6em; /* títulos de 1 ou 2 linhas ficam alinhados */
+        }
         .detalhes{ font-size: 14px; color: var(--moss-sage); margin-bottom: 4px; }
         .estrelas{ color: #c08a4a; }
  
+
+        /* PAGINAÇÃO */
+        .paginacao{
+            display: flex; justify-content: center; align-items: center;
+            flex-wrap: wrap; gap: 8px;
+            margin-top: 28px;
+        }
+        .pag-btn{
+            min-width: 40px; height: 40px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: 1px solid #cddbc4;
+            background-color: #ffffff;
+            color: var(--deep-sage);
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .pag-btn:hover:not(:disabled){ background-color: var(--sage); }
+        .pag-btn.ativo{ background-color: var(--olive-sage); border-color: var(--olive-sage); color: #ffffff; }
+        .pag-btn:disabled{ opacity: 0.45; cursor: default; }
+        .pag-pontos{ color: var(--moss-sage); padding: 0 4px; }
+
         .vazio{ padding: 30px; text-align: center; color: var(--moss-sage); }
  
         /* BOTÕES */
