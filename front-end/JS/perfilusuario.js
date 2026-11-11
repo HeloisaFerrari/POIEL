@@ -36,6 +36,11 @@ function iniciais(nome) {
 
 const $ = (id) => document.getElementById(id);
 
+const GENEROS = ["Romance", "Fantasia", "Ficção científica", "Suspense", "Terror", "Aventura", "Drama", "Biografia"];
+const ESTADOS = ["Novo", "Excelente", "Bom", "Regular", "Desgastado"];
+let livrosAtuais = []; // livros que estão na tela
+const SITUACOES = { em_negociacao: "Em troca", trocado: "Trocado" };
+
 let perfilAtual = null;   // dados do perfil que estão na tela
 let fotoNova;             // undefined = não mexeu na foto | null = remover | texto = foto nova
 
@@ -73,9 +78,26 @@ function cardLivro(livro) {
                 <div class="livro-etiquetas">
                     <span class="etiqueta">${escapeHtml(livro.genero)}</span>
                     <span class="etiqueta">${escapeHtml(livro.estado_conservacao)}</span>
+                    ${SITUACOES[livro.status] ? `<span class="etiqueta">${SITUACOES[livro.status]}</span>` : ""}
+                </div>
+                <div class="livro-acoes">
+                    <button type="button" class="botao-contorno botao-pequeno" data-acao="editar" data-id="${livro.id_livro}">Editar</button>
+                    ${livro.status === "disponivel" ? `<button type="button" class="botao-contorno botao-pequeno botao-perigo" data-acao="excluir" data-id="${livro.id_livro}">Excluir</button>` : ""}
                 </div>
             </div>
         </article>`;
+}
+
+function desenharLivros(livros) {
+    livrosAtuais = livros;
+    $("stat-livros").textContent = livros.length;
+    $("meus-livros-grade").innerHTML = livros.length > 0
+        ? livros.map(cardLivro).join("")
+        : `<p class="perfil-subtitulo">Você ainda não cadastrou nenhum livro.</p>`;
+}
+
+async function recarregarLivros() {
+    desenharLivros(await chamarApi("/meus-livros"));
 }
 
 async function carregarPerfil() {
@@ -87,11 +109,9 @@ async function carregarPerfil() {
 
         perfilAtual = perfil;
         desenharCartao(perfil);
-        $("stat-livros").textContent = perfil.total_livros;
-
-        $("meus-livros-grade").innerHTML = livros.length > 0
-            ? livros.map(cardLivro).join("")
-            : `<p class="perfil-subtitulo">Você ainda não cadastrou nenhum livro.</p>`;
+        desenharLivros(livros);
+        $("stat-trocas").textContent = perfil.trocas_realizadas;
+        $("stat-propostas").textContent = perfil.propostas_pendentes;
     } catch (erro) {
         $("perfil-nome").textContent = "Não foi possível carregar o perfil";
         $("meus-livros-grade").innerHTML =
@@ -193,6 +213,158 @@ $("form-editar").addEventListener("submit", async (e) => {
         dialogo.close();
     } catch (erro) {
         $("editar-msg").textContent = erro.message;
+    } finally {
+        botao.disabled = false;
+    }
+});
+
+/* ===== EDITAR E EXCLUIR LIVROS ===== */
+$("meus-livros-grade").addEventListener("click", (e) => {
+    const botao = e.target.closest("button[data-acao]");
+    if (!botao) return;
+    const livro = livrosAtuais.find(l => l.id_livro === Number(botao.dataset.id));
+    if (!livro) return;
+    if (botao.dataset.acao === "editar") abrirEdicaoLivro(livro);
+    else abrirExclusao(livro);
+});
+
+/* --- excluir --- */
+let livroParaExcluir = null;
+
+function abrirExclusao(livro) {
+    livroParaExcluir = livro;
+    $("excluir-titulo").textContent = livro.titulo; // textContent: seguro contra símbolos HTML
+    $("excluir-msg").textContent = "";
+    $("dialogo-excluir").showModal();
+}
+
+$("btn-excluir-cancelar").addEventListener("click", () => $("dialogo-excluir").close());
+
+$("btn-excluir-confirmar").addEventListener("click", async () => {
+    const botao = $("btn-excluir-confirmar");
+    botao.disabled = true;
+    try {
+        await chamarApi("/livros/" + livroParaExcluir.id_livro, { method: "DELETE" });
+        $("dialogo-excluir").close();
+        await recarregarLivros();
+    } catch (erro) {
+        $("excluir-msg").textContent = erro.message; // ex.: livro que já está em uma troca
+    } finally {
+        botao.disabled = false;
+    }
+});
+
+/* --- editar --- */
+let livroEditando = null;
+let capaNova;        // undefined = não mexeu | null = remover | texto = imagem nova
+let contracapaNova;
+
+function preencherOpcoes(select, lista, atual) {
+    const todas = lista.includes(atual) ? lista : [...lista, atual]; // mantém um valor antigo que não está na lista
+    select.innerHTML = todas.map(v => `<option>${escapeHtml(v)}</option>`).join("");
+    select.value = atual;
+}
+
+function mostrarPreviaCapa(idElemento, src) {
+    $(idElemento).innerHTML = src ? `<img src="${escapeHtml(src)}" alt="">` : "Sem foto";
+}
+
+/* reduz a imagem mantendo a proporção, para o banco não ficar pesado */
+function reduzirImagem(dataUrl, ladoMaximo = 700) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+            const escala = Math.min(1, ladoMaximo / Math.max(img.width, img.height));
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.round(img.width * escala);
+            canvas.height = Math.round(img.height * escala);
+            const ctx = canvas.getContext("2d");
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL("image/jpeg", 0.75));
+        };
+        img.onerror = () => resolve(null);
+        img.src = dataUrl;
+    });
+}
+
+function abrirEdicaoLivro(livro) {
+    livroEditando = livro;
+    capaNova = undefined;
+    contracapaNova = undefined;
+    $("livro-titulo").value = livro.titulo;
+    $("livro-autor").value = livro.autor;
+    preencherOpcoes($("livro-genero"), GENEROS, livro.genero);
+    preencherOpcoes($("livro-estado"), ESTADOS, livro.estado_conservacao);
+    mostrarPreviaCapa("capa-previa", livro.capa_url);
+    mostrarPreviaCapa("contracapa-previa", livro.contracapa_url);
+    $("livro-msg").textContent = "";
+    $("dialogo-livro").showModal();
+}
+
+function ligarCampoFoto(idArquivo, idRemover, idPrevia, definir) {
+    $(idArquivo).addEventListener("change", (e) => {
+        const arquivo = e.target.files[0];
+        e.target.value = ""; // deixa escolher o mesmo arquivo de novo, se quiser
+        if (!arquivo) return;
+        if (!arquivo.type.startsWith("image/")) {
+            $("livro-msg").textContent = "Escolha um arquivo de imagem.";
+            return;
+        }
+        const leitor = new FileReader();
+        leitor.onload = async () => {
+            const reduzida = await reduzirImagem(leitor.result);
+            if (!reduzida) {
+                $("livro-msg").textContent = "Não foi possível usar essa imagem.";
+                return;
+            }
+            $("livro-msg").textContent = "";
+            definir(reduzida);
+            mostrarPreviaCapa(idPrevia, reduzida);
+        };
+        leitor.readAsDataURL(arquivo);
+    });
+    $(idRemover).addEventListener("click", () => {
+        definir(null);
+        mostrarPreviaCapa(idPrevia, null);
+    });
+}
+
+ligarCampoFoto("capa-arquivo", "capa-remover", "capa-previa", (v) => { capaNova = v; });
+ligarCampoFoto("contracapa-arquivo", "contracapa-remover", "contracapa-previa", (v) => { contracapaNova = v; });
+
+$("btn-livro-cancelar").addEventListener("click", () => $("dialogo-livro").close());
+
+$("form-livro").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const titulo = $("livro-titulo").value.trim();
+    const autor = $("livro-autor").value.trim();
+    if (!titulo || !autor) {
+        $("livro-msg").textContent = "Preencha o título e o autor.";
+        return;
+    }
+
+    const botao = $("btn-livro-salvar");
+    botao.disabled = true;
+    try {
+        await chamarApi("/livros/" + livroEditando.id_livro, {
+            method: "PUT",
+            body: JSON.stringify({
+                titulo,
+                autor,
+                genero: $("livro-genero").value,
+                estado: $("livro-estado").value,
+                alterarCapa: capaNova !== undefined,
+                capa: capaNova === undefined ? null : capaNova,
+                alterarContracapa: contracapaNova !== undefined,
+                contracapa: contracapaNova === undefined ? null : contracapaNova
+            })
+        });
+        $("dialogo-livro").close();
+        await recarregarLivros();
+    } catch (erro) {
+        $("livro-msg").textContent = erro.message;
     } finally {
         botao.disabled = false;
     }

@@ -184,16 +184,23 @@
  
         $("meusLivros").addEventListener("change", () => { $("btnEnviar").disabled = false; });
  
-        $("btnEnviar").addEventListener("click", () => {
+        $("btnEnviar").addEventListener("click", async () => {
             const oferta = document.querySelector("input[name='oferta']:checked");
             if(!oferta) return;
-            /* Aqui o back-end deve criar o registro em "troca":
-               { livroDesejadoId: livroAberto.id, livroOferecidoId: Number(oferta.value) } */
-            console.log("Proposta:", livroAberto.id, "em troca de", oferta.value);
-            modal.hide();
-            alert("Proposta enviada! Acompanhe em Minhas trocas.");
+            $("btnEnviar").disabled = true;
+            try{
+                await chamarApi("/trocas", {
+                    method: "POST",
+                    body: JSON.stringify({ idLivroDesejado: livroAberto.id, idLivroOferecido: Number(oferta.value) })
+                });
+                modal.hide();
+                alert("Proposta enviada! Acompanhe em Minhas trocas.");
+            }catch(erro){
+                alert(erro.message); // ex.: "Você já enviou essa proposta"
+                $("btnEnviar").disabled = false;
+            }
         });
- 
+
         /* ===== INÍCIO ===== */
         /* busca os livros no banco e desenha a página */
         async function carregarDados(){

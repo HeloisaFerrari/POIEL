@@ -57,11 +57,11 @@
             <small>Livros cadastrados</small>
         </div>
         <div class="estatistica">
-            <span>–</span>
+            <span id="stat-trocas">–</span>
             <small>Trocas realizadas</small>
         </div>
         <div class="estatistica">
-            <span>–</span>
+            <span id="stat-propostas">–</span>
             <small>Propostas pendentes</small>
         </div>
     </section>
@@ -152,6 +152,72 @@
         <div class="editar-botoes">
             <button type="button" class="botao-contorno" id="btn-cancelar">Cancelar</button>
             <button type="submit" class="botao-verde" id="btn-salvar">Salvar</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Janela para excluir um livro -->
+<dialog class="dialogo-perfil" id="dialogo-excluir" aria-labelledby="titulo-excluir">
+    <div class="dialogo-form">
+        <h2 id="titulo-excluir">Excluir livro</h2>
+        <p>Tem certeza que quer excluir <strong id="excluir-titulo"></strong>? Essa ação não pode ser desfeita.</p>
+        <p class="editar-msg" id="excluir-msg" role="status"></p>
+        <div class="editar-botoes">
+            <button type="button" class="botao-contorno" id="btn-excluir-cancelar">Cancelar</button>
+            <button type="button" class="botao-vermelho" id="btn-excluir-confirmar">Excluir</button>
+        </div>
+    </div>
+</dialog>
+
+<!-- Janela para editar um livro -->
+<dialog class="dialogo-perfil" id="dialogo-livro" aria-labelledby="titulo-editar-livro">
+    <form id="form-livro">
+        <h2 id="titulo-editar-livro">Editar livro</h2>
+
+        <div>
+            <label class="campo" for="livro-titulo">Título</label>
+            <input type="text" id="livro-titulo" maxlength="150" required>
+        </div>
+        <div>
+            <label class="campo" for="livro-autor">Autor</label>
+            <input type="text" id="livro-autor" maxlength="120" required>
+        </div>
+        <div class="editar-duas-colunas">
+            <div>
+                <label class="campo" for="livro-genero">Gênero</label>
+                <select id="livro-genero"></select>
+            </div>
+            <div>
+                <label class="campo" for="livro-estado">Estado</label>
+                <select id="livro-estado"></select>
+            </div>
+        </div>
+
+        <div class="editar-duas-colunas">
+            <div class="editar-capa">
+                <span class="campo">Capa</span>
+                <div class="previa-capa" id="capa-previa"></div>
+                <div class="editar-foto-acoes">
+                    <label class="botao-contorno botao-pequeno" for="capa-arquivo">Trocar</label>
+                    <input type="file" id="capa-arquivo" accept="image/*" hidden>
+                    <button type="button" class="botao-contorno botao-pequeno" id="capa-remover">Remover</button>
+                </div>
+            </div>
+            <div class="editar-capa">
+                <span class="campo">Contracapa</span>
+                <div class="previa-capa" id="contracapa-previa"></div>
+                <div class="editar-foto-acoes">
+                    <label class="botao-contorno botao-pequeno" for="contracapa-arquivo">Trocar</label>
+                    <input type="file" id="contracapa-arquivo" accept="image/*" hidden>
+                    <button type="button" class="botao-contorno botao-pequeno" id="contracapa-remover">Remover</button>
+                </div>
+            </div>
+        </div>
+
+        <p class="editar-msg" id="livro-msg" role="status"></p>
+        <div class="editar-botoes">
+            <button type="button" class="botao-contorno" id="btn-livro-cancelar">Cancelar</button>
+            <button type="submit" class="botao-verde" id="btn-livro-salvar">Salvar</button>
         </div>
     </form>
 </dialog>

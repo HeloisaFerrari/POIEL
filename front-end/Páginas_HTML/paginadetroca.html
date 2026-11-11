@@ -48,60 +48,13 @@
             Você escolhe um livro do seu acervo, envia uma proposta e aguarda a resposta do outro estudante.
         </div>
 
+        <!-- Avisos de outros usuários (troca encerrada, proposta recebida...) -->
+        <div id="avisos" aria-live="polite"></div>
+
 
         <section class="secao" id="secao-andamento">
             <h2 class="titulo-secao">Em andamento (2)</h2>     
-               <div class="row g-4">
-
-            <!-- card 1 -->
-            <div class="col-12 col-md-6 col-lg-4">
-                <article class="card-troca">
-                    <div class="capa-livro">
-                        <img src="../img/Pequeno_Príncipe.jpg" alt="Capa do livro O Pequeno Príncipe">
-                    </div>
-                    <div class="corpo">
-                        <span class="status status-combinada">Troca aceita</span>
-                        <h2>O Pequeno Príncipe</h2>
-                        <p class="detalhes"><i class="bi bi-arrow-left-right"></i> Você oferece este livro · recebe <strong>A Hora da Estrela</strong></p>
-                        <p class="detalhes">Conversando com <strong>Ana Souza</strong></p>
-                        <p class="detalhes">
-                            <i class="bi bi-geo-alt-fill"></i> Biblioteca do IFSC ·
-                            <i class="bi bi-clock"></i> Amanhã, 12h30
-                        </p>
-                        <p class="detalhes">
-                            <span class="estrelas">★★★★★</span> 5,0 · 12 avaliações
-                        </p>
-                         <div class="d-flex gap-2 mt-3">
-                            <button class="btn btn-chat" data-acao="chat"><i class="bi bi-chat-dots"></i> Abrir chat</button>
-                            <button class="btn btn-avaliar" data-acao="concluir">Marcar como concluída</button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <!-- card 2 -->
-            <div class="col-12 col-md-6 col-lg-4">
-                <article class="card-troca">
-                    <div class="capa-livro">
-                        <img src="../img/Dom_Casmurro.jpg" alt="Capa do livro Dom Casmurro">
-                    </div>
-                    <div class="corpo">
-                        <span class="status status-pendente">Aguardando sua resposta</span>
-
-                        <h2>Dom Casmurro</h2>
-                        <p class="detalhes">Proposta recebida de <strong>Lucas Pereira</strong></p>
-                        <p class="detalhes"><i class="bi bi-arrow-left-right"></i> Em troca de: A Hora da Estrela</p>
-                        <p class="detalhes">
-                            <span class="estrelas">★★★★☆</span> 4,0 · 8 avaliações
-                        </p>
-                                               <div class="d-flex gap-2 mt-3">
-                            <button class="btn btn-chat" data-acao="aceitar">Aceitar</button>
-                            <button class="btn btn-avaliar" data-acao="recusar">Recusar</button>
-                            <button class="btn btn-avaliar" data-acao="chat"><i class="bi bi-chat-dots"></i> Abrir chat</button>
-                        </div>
-                    </div>
-                </article>
-            </div>
+               <div class="row g-4"></div>
     <div class="vazio" id="vazio-andamento" hidden>
         <p>Você ainda não tem trocas em andamento.</p>
         <a href="index.html" class="btn btn-chat">Ir para a página principal</a>
@@ -110,27 +63,7 @@
 
 <section class="secao" id="secao-aguardando">
     <h2 class="titulo-secao">Aguardando match (1)</h2>
-    <div class="row g-4">
-
-        <!--card novo-->
-        <div class="col-12 col-md-6 col-lg-4">
-            <article class="card-troca">
-                <div class="capa-livro">
-                    <img src="../img/Capitaes_da_areia.jpg" alt="Capa do livro Capitães da Areia">
-                </div>
-                <div class="corpo">
-                    <span class="status status-aguardando">Aguardando match</span>
-                    <h2>Capitães da Areia</h2>
-                    <p class="detalhes"><i class="bi bi-calendar3"></i> Cadastrado em 30/10/2026</p>
-                    <div class="d-flex gap-2 mt-3">
-                        <button class="btn btn-chat" data-acao="editar"><i class="bi bi-pencil"></i> Editar</button>
-                        <button class="btn btn-avaliar" data-acao="remover"><i class="bi bi-trash"></i> Remover</button>
-                    </div>
-                </div>
-            </article>
-        </div>
-
-    </div>
+    <div class="row g-4"></div>
     <div class="vazio" id="vazio-aguardando" hidden>
         <p>Você ainda não tem livros aguardando match.</p>
         <a href="index.html" class="btn btn-chat">Ir para a página principal</a>
@@ -139,31 +72,8 @@
 
 <section class="secao" id="secao-finalizadas">
     <h2 class="titulo-secao">Finalizadas (1)</h2>
-    <div class="row g-4">
-
-            <!-- CARD 3 -->
-            <div class="col-12 col-md-6 col-lg-4">
-                <article class="card-troca">
-                    <div class="capa-livro">
-                        <img src="../img/Capitaes_da_areia.jpg" alt="Capa do livro Capitães da Areia">
-                    </div>
-                    <div class="corpo">
-                        <span class="status status-concluida">Concluída</span>
-                        <h2>Capitães da Areia</h2>
-                        <p class="detalhes">Troca feita com <strong>Marina Costa</strong></p>
-                        <p class="detalhes"><i class="bi bi-arrow-left-right"></i> Você deu este livro · recebeu <strong>Vidas Secas</strong></p>
-                        <p class="detalhes"><i class="bi bi-calendar-check"></i> Concluída em 20/10/2026</p>
-                        <p class="detalhes">
-                            <span class="estrelas">★★★★☆</span> 4,0 · 3 avaliações
-                        </p>
-                                                <div class="d-flex gap-2 mt-3">
-                            <button class="btn btn-avaliar" data-acao="avaliar">★ Avaliar usuário</button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-        <div class="vazio" id="vazio-finalizadas" hidden>
+    <div class="row g-4"></div>
+    <div class="vazio" id="vazio-finalizadas" hidden>
         <p>Você ainda não tem trocas finalizadas.</p>
         <a href="index.html" class="btn btn-chat">Ir para a página principal</a>
     </div>

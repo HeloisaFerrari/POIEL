@@ -212,3 +212,25 @@ nav.nav-poiel .nav-links a.ativo{
     font-size: 13px;
     color: #e8f1e0;
 }
+
+/* ===== AVISOS E CAPA SEM IMAGEM ===== */
+.aviso{
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    background-color: #fbefd5;
+    border: 1px solid #ecd9ab;
+    color: #6b4a10;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+}
+.capa-livro .sem-capa{
+    display: flex; align-items: center; justify-content: center;
+    height: 220px;
+    aspect-ratio: 2 / 3;          /* mesma proporção da capa com imagem */
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+    font-weight: 700;
+    background-color: #e8efe3;
+    color: var(--forest-sage);
+}
