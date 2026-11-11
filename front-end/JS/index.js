@@ -193,6 +193,7 @@
                     method: "POST",
                     body: JSON.stringify({ idLivroDesejado: livroAberto.id, idLivroOferecido: Number(oferta.value) })
                 });
+                cacheDoUsuario.invalidar("minhas-trocas");
                 modal.hide();
                 alert("Proposta enviada! Acompanhe em Minhas trocas.");
             }catch(erro){
@@ -225,6 +226,14 @@
                 return;
             }
             montarGrade();
+            precarregarMinhaConta();
+        }
+
+        /* guarda em segundo plano o perfil, os livros e as trocas: essas páginas abrem na hora depois */
+        function precarregarMinhaConta(){
+            [["perfil", "/perfil"], ["meus-livros", "/meus-livros"], ["minhas-trocas", "/minhas-trocas"]].forEach(([nome, rota]) => {
+                chamarApi(rota).then(dados => cacheDoUsuario.guardar(nome, dados)).catch(() => {});
+            });
         }
 
         montarGeneros();

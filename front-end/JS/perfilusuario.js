@@ -97,21 +97,26 @@ function desenharLivros(livros) {
 }
 
 async function recarregarLivros() {
-    desenharLivros(await chamarApi("/meus-livros"));
+    const livros = await chamarApi("/meus-livros");
+    cacheDoUsuario.guardar("meus-livros", livros);
+    cacheDoUsuario.invalidar("minhas-trocas"); // a lista de "aguardando match" mudou
+    desenharLivros(livros);
 }
 
+function desenharPerfilCompleto(perfil) {
+    perfilAtual = perfil;
+    desenharCartao(perfil);
+    $("stat-trocas").textContent = perfil.trocas_realizadas;
+    $("stat-propostas").textContent = perfil.propostas_pendentes;
+}
+
+// abre na hora com o que já está guardado (o perfil vem do login) e atualiza em seguida
 async function carregarPerfil() {
     try {
-        const [perfil, livros] = await Promise.all([
-            chamarApi("/perfil"),
-            chamarApi("/meus-livros")
+        await Promise.all([
+            carregarComCache("perfil", () => chamarApi("/perfil"), desenharPerfilCompleto),
+            carregarComCache("meus-livros", () => chamarApi("/meus-livros"), desenharLivros)
         ]);
-
-        perfilAtual = perfil;
-        desenharCartao(perfil);
-        desenharLivros(livros);
-        $("stat-trocas").textContent = perfil.trocas_realizadas;
-        $("stat-propostas").textContent = perfil.propostas_pendentes;
     } catch (erro) {
         $("perfil-nome").textContent = "Não foi possível carregar o perfil";
         $("meus-livros-grade").innerHTML =
@@ -209,6 +214,7 @@ $("form-editar").addEventListener("submit", async (e) => {
             })
         });
         perfilAtual = { ...perfilAtual, ...atualizado };
+        cacheDoUsuario.guardar("perfil", perfilAtual);
         desenharCartao(perfilAtual);
         dialogo.close();
     } catch (erro) {

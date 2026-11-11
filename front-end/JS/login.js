@@ -1,5 +1,10 @@
 const URL_API = "http://localhost:3000";
 
+// chegar na tela de login significa estar deslogado: limpa a sessão e o que estava guardado
+localStorage.removeItem("token");
+localStorage.removeItem("usuario");
+cacheDoUsuario.limparTudo();
+
 const formLogin = document.getElementById("formLogin");
 const msg = document.getElementById("mensagem");
 
@@ -32,6 +37,8 @@ formLogin.addEventListener("submit", async (e) => {
     // guarda o token e os dados do usuário no navegador para as outras páginas usarem
     localStorage.setItem("token", dados.token);
     localStorage.setItem("usuario", JSON.stringify(dados.usuario));
+    // o servidor já mandou o perfil: guardamos para a página de perfil abrir na hora
+    if (dados.perfil) cacheDoUsuario.guardar("perfil", dados.perfil);
 
     window.location.href = "index.html";
   } catch (erro) {

@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('./conexaobanco');
+const { buscarPerfil } = require('./perfil');
 
 const router = express.Router();
 
@@ -70,9 +71,13 @@ router.post('/login', async (req, res) => {
     // o token é a "pulseira" que prova que a pessoa fez login
     const token = jwt.sign({ id: usuario.id_usuario }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
+    // o perfil já vai junto com o login: assim a página de perfil abre na hora, sem esperar o banco
+    const perfil = await buscarPerfil(usuario.id_usuario);
+
     res.json({
       token,
-      usuario: { id: usuario.id_usuario, nome: usuario.nome_completo, email: usuario.email }
+      usuario: { id: usuario.id_usuario, nome: usuario.nome_completo, email: usuario.email },
+      perfil
     });
   } catch (erro) {
     console.error(erro);

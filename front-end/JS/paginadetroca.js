@@ -155,13 +155,17 @@ function desenharAvisos(avisos) {
         </div>`).join("");
 }
 
-async function carregar() {
+function desenharTudo(dados) {
+    desenharAvisos(dados.avisos);
+    desenharSecao("andamento", dados.andamento.map(cardAndamento));
+    desenharSecao("aguardando", dados.aguardando.map(cardAguardando));
+    desenharSecao("finalizadas", dados.finalizadas.map(cardFinalizada));
+}
+
+// mostrarCache = true na abertura da página (aparece na hora o que já estava guardado)
+async function carregar(mostrarCache = true) {
     try {
-        const dados = await chamarApi("/minhas-trocas");
-        desenharAvisos(dados.avisos);
-        desenharSecao("andamento", dados.andamento.map(cardAndamento));
-        desenharSecao("aguardando", dados.aguardando.map(cardAguardando));
-        desenharSecao("finalizadas", dados.finalizadas.map(cardFinalizada));
+        await carregarComCache("minhas-trocas", () => chamarApi("/minhas-trocas"), desenharTudo, { mostrarCache });
     } catch (erro) {
         $("avisos").innerHTML = `<div class="aviso" role="alert"><span>Não foi possível carregar suas trocas. O servidor está ligado?</span></div>`;
     }
@@ -174,7 +178,8 @@ async function pedir(rota, opcoes) {
     } catch (erro) {
         alert(erro.message); // ex.: "Um dos livros não está mais disponível"
     }
-    await carregar();
+    cacheDoUsuario.invalidar("meus-livros", "perfil"); // o estado dos livros e os números do perfil mudaram
+    await carregar(false);
 }
 
 const acoes = {
@@ -207,4 +212,4 @@ document.addEventListener("click", (evento) => {
 
 carregar();
 // confere de tempos em tempos se chegou algum aviso novo (outra pessoa aceitou, encerrou a troca...)
-setInterval(() => { if (!document.hidden) carregar(); }, 30000);
+setInterval(() => { if (!document.hidden) carregar(false); }, 30000);
