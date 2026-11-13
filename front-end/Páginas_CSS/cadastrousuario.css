@@ -18,7 +18,7 @@
     font-family: "Poppins", sans-serif;
 }
 
-body{
+body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;          /* navbar em cima, footer embaixo */
