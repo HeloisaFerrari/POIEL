@@ -204,30 +204,61 @@
 
         /* ===== INÍCIO ===== */
         /* busca os livros no banco e desenha a página */
-        async function carregarDados(){
-            try{
-                const lista = await chamarApi("/livros");
-                livros = lista.map(l => ({
-                    id: l.id_livro,
-                    titulo: l.titulo,
-                    autor: l.autor,
-                    genero: l.genero,
-                    estado: l.estado_conservacao,
-                    donoId: l.id_usuario,
-                    dono: l.dono,
-                    nota: Number(l.avaliacao_dono) || 0,
-                    capa: l.capa_url || "",
-                    contracapa: l.contracapa_url || ""
-                }));
-                meusLivros = livros.filter(l => l.donoId === USUARIO_ID);
-            }catch(erro){
-                $("semResultado").textContent = "Não foi possível carregar os livros. O servidor está ligado?";
-                $("semResultado").classList.remove("d-none");
-                return;
-            }
-            montarGrade();
-            precarregarMinhaConta();
+        /* ===== CACHE DA LISTA DE LIVROS (uma chave por usuário) ===== */
+const CHAVE_CACHE_LIVROS = "poiel_livros_" + USUARIO_ID;
+
+function lerCacheLivros(){
+    try{ return JSON.parse(localStorage.getItem(CHAVE_CACHE_LIVROS)); }
+    catch{ return null; }
+}
+function salvarCacheLivros(lista){
+    try{ localStorage.setItem(CHAVE_CACHE_LIVROS, JSON.stringify(lista)); }
+    catch{} // se encher o armazenamento, só não guarda
+}
+
+/* transforma a resposta do banco no formato da página e desenha */
+function aplicarLivros(lista){
+    livros = lista.map(l => ({
+        id: l.id_livro,
+        titulo: l.titulo,
+        autor: l.autor,
+        genero: l.genero,
+        estado: l.estado_conservacao,
+        donoId: l.id_usuario,
+        dono: l.dono,
+        nota: Number(l.avaliacao_dono) || 0,
+        capa: l.capa_url || "",
+        contracapa: l.contracapa_url || ""
+    }));
+    meusLivros = livros.filter(l => l.donoId === USUARIO_ID);
+    montarGrade();
+}
+
+/* ===== INÍCIO ===== */
+async function carregarDados(){
+    const cache = lerCacheLivros();
+
+    // 1) já tem lista guardada: mostra na hora, sem esperar o banco
+    if(Array.isArray(cache)) aplicarLivros(cache);
+
+    // 2) por baixo dos panos, busca a lista atual
+    try{
+        const lista = await chamarApi("/livros");
+        // só redesenha se algo mudou (livro novo, livro que saiu etc.)
+        if(JSON.stringify(lista) !== JSON.stringify(cache)){
+            salvarCacheLivros(lista);
+            aplicarLivros(lista);
         }
+    }catch(erro){
+        // se já há lista na tela, não atrapalha com erro
+        if(!Array.isArray(cache)){
+            $("semResultado").textContent = "Não foi possível carregar os livros. O servidor está ligado?";
+            $("semResultado").classList.remove("d-none");
+            return;
+        }
+    }
+    precarregarMinhaConta();
+}
 
         /* guarda em segundo plano o perfil, os livros e as trocas: essas páginas abrem na hora depois */
         function precarregarMinhaConta(){
