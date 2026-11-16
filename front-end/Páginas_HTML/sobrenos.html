@@ -2,156 +2,337 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sobre nós</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../Páginas_CSS/cadastrolivro.css">
     <link rel="stylesheet" href="../Páginas_CSS/global.css">
+
+    <style>
+        :root {
+            --verde-escuro: #314938;
+            --verde-medio: #4a5f5a;
+            --verde-sombra: #263a2c;
+            --verde-claro: #9cb6ad;
+            --papel: #f4f3ee;
+            --fundo: #e8e6df;
+        }
+        body {
+            background-color: var(--fundo);
+            background-image: radial-gradient(rgba(74, 95, 90, 0.25) 1px, transparent 1.2px);
+            background-size: 26px 26px;
+            color: var(--verde-escuro);
+        }
+        .navbar-poiel { background-color: var(--verde-escuro); }
+        .navbar-poiel .nav-link { color: var(--papel); }
+        .navbar-poiel .nav-link:hover,
+        .navbar-poiel .nav-link.active { color: var(--verde-claro); }
+
+        .titulo { color: var(--verde-escuro); font-weight: 700; letter-spacing: -0.01em; }
+        .subtitulo { color: var(--verde-medio); font-style: italic; }
+
+        .bloco-papel {
+            background-color: var(--papel);
+            background-image: linear-gradient(transparent 95%, rgba(156, 182, 173, 0.38) 95%);
+            background-size: 100% 2.1rem;
+            border-left: 6px solid var(--verde-medio);
+            border-radius: 14px;
+            box-shadow: 0 4px 0 var(--verde-claro);
+        }
+
+        .passo {
+            background-color: var(--papel);
+            border-radius: 14px;
+            box-shadow: 0 4px 0 var(--verde-claro);
+            transition: transform 0.2s ease;
+        }
+        .passo:hover { transform: translateY(-4px); }
+        .passo-numero {
+            width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--verde-medio), var(--verde-escuro));
+            color: var(--papel);
+            font-weight: 700; font-size: 1.25rem;
+        }
+
+        .accordion-item {
+            background-color: var(--papel);
+            border: 0;
+            border-left: 6px solid var(--verde-medio);
+            border-radius: 14px !important;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 0 var(--verde-claro);
+        }
+        .accordion-button {
+            background-color: var(--papel);
+            color: var(--verde-escuro);
+            font-weight: 600;
+            font-size: 1.15rem;
+        }
+        .accordion-button:not(.collapsed) {
+            background-color: var(--fundo);
+            color: var(--verde-escuro);
+            box-shadow: none;
+        }
+        .accordion-button:focus { box-shadow: 0 0 0 0.2rem rgba(74, 95, 90, 0.3); }
+        .accordion-body {
+            background-image: linear-gradient(transparent 95%, rgba(156, 182, 173, 0.38) 95%);
+            background-size: 100% 2.1rem;
+            line-height: 2.1rem;
+        }
+
+        /* ===== Equipe ===== */
+        .membro {
+            background-color: var(--papel);
+            border: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 0 var(--verde-claro);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .membro:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 0 var(--verde-claro), 0 20px 30px -12px rgba(49, 73, 56, 0.45);
+        }
+        .membro-foto {
+            display: block;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-bottom: 4px solid var(--verde-medio);
+        }
+        /* Imagem padrão: para trocar, substitua a URL abaixo ou use um <img class="membro-foto"> */
+        .membro-foto-padrao {
+            background-color: var(--verde-claro);
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><rect width='200' height='200' fill='%239cb6ad'/><circle cx='100' cy='78' r='38' fill='%23f4f3ee'/><path d='M36 186c8-42 36-66 64-66s56 24 64 66z' fill='%23f4f3ee'/></svg>");
+            background-size: cover;
+            background-position: center;
+        }
+        .membro-nome {
+            color: var(--verde-escuro);
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            margin: 0;
+            padding: 0.9rem 0.5rem;
+        }
+
+        .footer-poiel {
+            background-color: var(--verde-escuro);
+            color: var(--papel);
+            border-top: 4px solid var(--verde-claro);
+        }
+    </style>
 </head>
 <body>
+
     <nav class="nav-poiel" aria-label="Navegação principal">
-    <div class="nav-conteudo">
-        <a class="nav-marca" href="index.html">POIEL</a>
-        <button class="nav-botao" id="nav-botao" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
-            <span></span><span></span><span></span>
-        </button>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="index.html">Principal</a></li>
-            <li><a href="paginadetroca.html">Minhas Trocas</a></li>
-            <li><a href="cadastrolivro.html">Cadastro Livro</a></li>
-            <li><a href="sobrenos.html">Sobre nós</a></li>
-             <li><a href="perfilusuario.html">Meu Perfil</a></li>
-        </ul>
-    </div>
-</nav>
-    <section class="view" id="view-sobre">
-        <div class="page-head">
-            <h1>Sobre nós</h1>
-            <p>Projeto da Oficina de Integração de Encontro de Livros.</p>
+        <div class="nav-conteudo">
+            <a class="nav-marca" href="index.html">POIEL</a>
+            <button class="nav-botao" id="nav-botao" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Principal</a></li>
+                <li><a href="paginadetroca.html">Minhas Trocas</a></li>
+                <li><a href="cadastrolivro.html">Cadastro Livro</a></li>
+                <li><a href="sobrenos.html">Sobre nós</a></li>
+                 <li><a href="perfilusuario.html">Meu Perfil</a></li>
+            </ul>
         </div>
+    </nav>
 
-        <div class="about-lead">
-            <p>
-                Somos estudantes de Módulo 3 do curso Técnico em Desenvolvimento
-                de Sistemas (TDS) do IFSC e desenvolvemos o POIEL com o objetivo
-                de tornar os livros mais acessíveis e incentivar o compartilhamento
-                de conhecimento.
-            </p>
-        
-            <p>
-                A ideia do POIEL surgiu da vontade de dar mais oportunidades para
-                os livros que já foram lidos. Queremos facilitar o acesso à leitura,
-                permitindo que estudantes troquem livros entre si, encontrem novas
-                histórias e aproveitem melhor os livros que já têm.
-            </p>
-        
-            <p>
-                Além disso, queremos aproximar pessoas que gostam de assuntos
-                parecidos, criando um espaço para compartilhar interesses e
-                descobrir novas leituras.
-            </p>
-        </div>
-        <h2 class="about-h2">Como funciona</h2>
-        <div class="how-steps">
-            <div class="how-step">
-                <b>1. Cadastre</b>
-                <span>Adicione ao seu acervo um livro que você já leu e gostaria de trocar.</span>
-            </div>
-            <div class="how-step">
-                <b>2. Procure</b>
-                <span>Busque títulos disponíveis no campus e encontre sua próxima leitura</span>
-            </div>
-            <div class="how-step">
-                <b>3. Proponha</b>
-                <span>Escolha um livro do seu acervo para oferecer em troca.</span>
-            </div>
-        </div>
-        <div class="thematic-section">
-            <span class="thematic-label">
-                Núcleo temático
-            </span>
+    <main class="container py-5">
 
-            <h2 class="about-h2">
-                Trabalho, Tecnologia e Poder
-            </h2>
+        <!-- Cabeçalho -->
+        <header class="text-center mb-5">
+            <h1 class="titulo display-5">Sobre nós</h1>
+            <p class="lead subtitulo">Projeto da Oficina de Integração de Encontro de Livros.</p>
+        </header>
 
-            <div class="thematic-grid">
-                <div class="thematic-card">
-                    <h3>Trabalho</h3>
-                    <p>O POIEL tem uma ligação com o trabalho, já que se trata do desenvolvimento e da manutenção de uma plataforma digital,
-                         que são atividades comuns em muitos campos profissionais. Com a criação do site, é possível entender melhor como o conhecimento 
-                         técnico pode ser aplicado na prática e como é essencial ter profissionais qualificados para desenvolver essas soluções tecnológicas. 
-                          O projeto também conecta os alunos a experiências que podem encontrar no mercado de trabalho.
+        <!-- Apresentação -->
+        <section class="row justify-content-center mb-5">
+            <div class="col-lg-9">
+                <div class="bloco-papel p-4 p-md-5">
+                    <p class="fs-5 lh-lg">
+                        Somos estudantes de Módulo 3 do curso Técnico em Desenvolvimento de Sistemas (TDS) do IFSC e desenvolvemos o POIEL com o objetivo de tornar os livros mais acessíveis e incentivar o compartilhamento de conhecimento.
+                    </p>
+                    <p class="fs-5 lh-lg">
+                        A ideia do POIEL surgiu da vontade de dar mais oportunidades para os livros que já foram lidos. Queremos facilitar o acesso à leitura, permitindo que estudantes troquem livros entre si, encontrem novas histórias e aproveitem melhor os livros que já têm.
+                    </p>
+                    <p class="fs-5 lh-lg mb-0">
+                        Além disso, queremos aproximar pessoas que gostam de assuntos parecidos, criando um espaço para compartilhar interesses e descobrir novas leituras.
                     </p>
                 </div>
-
-                <div class="thematic-card">
-                    <h3>Tecnologia</h3>
-                    <p>A tecnologia está presente em todo o processo de criação do POIEL, desde a elaboração da interface até an organização das informações dos livros.
-                         O objetivo do projeto, utilizando HTML, CSS e MySQL, é desenvolver uma plataforma que torne mais simples o cadastro, 
-                         a busca e a troca de livros entre alunos do IFSC. Dessa forma, a tecnologia é utilizada para atender uma demanda da comunidade acadêmica, 
-                         facilitando o acesso à leitura.
-                    </p>
-                </div>
-
-                <div class="thematic-card">
-                    <h3>Poder</h3>
-                    <p>O poder está relacionado à possibilidade de ampliar o acesso à informação e ao conhecimento. 
-                        Nem todos os estudantes possuem as mesmas condições para adquirir livros, e iniciativas de compartilhamento
-                         podem contribuir para diminuir essas diferenças. Com o POIEL, buscamos oferecer mais oportunidades de acesso à leitura, 
-                         permitindo que os livros circulem entre diferentes pessoas e que o conhecimento alcance mais estudantes.
-                    </p>
-                </div>
-
             </div>
-
-        </div>
-        
-        <div class="purpose">
-
-            <h2>Nosso propósito</h2>
-
-            <p>Pensamos que um livro pode conter várias narrativas.
-                além daquilo que está registrado em suas páginas. 
-                Com o POIEL, buscamos incentivar o movimento de 
-                livros, conectar leitores e demonstrar que o 
-                conhecimento pode ser compartilhado.   
-            </p>
-
-        <h2 class="about-h2">Quem desenvolveu o POIEL</h2>
-        <div class="team-grid">
-<!-- Organizar as fotos -->
-            <div class="team-card">
-                <img src="../img/Heitor.jpeg" alt="Foto de Heitor" class="team-photo">
-                <b>Heitor</b>
-            </div>
-            <div class="team-card">
-                <img src="../img/Liz.jpeg" alt="Foto de Liz" class="team-photo">
-                <b>Liz</b>
-            </div>
-            <div class="team-card">
-                <img src="../img/Heloisa.jpeg" alt="Foto de Heloísa" class="team-photo">
-                <b>Heloísa</b>
-            </div>
-            <div class="team-card">
-                <img src="../img/Julia.jpeg" alt="Foto de Julia" class="team-photo">
-                <b>Julia</b>
-            </div>
-            <div class="team-card">
-                <img src="../img/Emanuely.jpeg" alt="Foto de Emanuely" class="team-photo">
-                <b>Emanuely</b>
-            </div>
-            <div class="team-card">
-                <img src="../img/Sofia.jpeg" alt="Foto de Sofia" class="team-photo">
-                <b>Sofia</b>
-            </div>
-        </div>
         </section>
-    </section>
-    <footer class="footer-poiel">
-    <p>Sua próxima história pode estar na estante de alguém.</p>
-</footer>
 
-<script src="../JS/global.js"></script>
+        <!-- Como funciona -->
+        <section class="mb-5">
+            <h2 class="text-center titulo h3 mb-4">Como funciona</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-4">
+                    <div class="passo p-4 h-100 text-center">
+                        <div class="passo-numero mx-auto mb-3">1</div>
+                        <h3 class="h5 fw-bold">Cadastre</h3>
+                        <p class="mb-0">Adicione ao seu acervo um livro que você já leu e gostaria de trocar.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="passo p-4 h-100 text-center">
+                        <div class="passo-numero mx-auto mb-3">2</div>
+                        <h3 class="h5 fw-bold">Procure</h3>
+                        <p class="mb-0">Busque títulos disponíveis no campus e encontre sua próxima leitura</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="passo p-4 h-100 text-center">
+                        <div class="passo-numero mx-auto mb-3">3</div>
+                        <h3 class="h5 fw-bold">Proponha</h3>
+                        <p class="mb-0">Escolha um livro do seu acervo para oferecer em troca.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
+        <!-- Núcleo temático: sanfona -->
+        <section class="row justify-content-center mb-5">
+            <div class="col-lg-9">
+                <h2 class="text-center titulo h3 mb-1">Núcleo temático</h2>
+                <p class="text-center subtitulo mb-4">Trabalho, Tecnologia e Poder</p>
+
+                <div class="accordion" id="acordeonSobre">
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseTrabalho" aria-expanded="true" aria-controls="collapseTrabalho">
+                                Trabalho
+                            </button>
+                        </h3>
+                        <div id="collapseTrabalho" class="accordion-collapse collapse show" data-bs-parent="#acordeonSobre">
+                            <div class="accordion-body">
+                                O POIEL tem uma ligação com o trabalho, já que se trata do desenvolvimento e da manutenção de uma plataforma digital, que são atividades comuns em muitos campos profissionais. Com a criação do site, é possível entender melhor como o conhecimento técnico pode ser aplicado na prática e como é essencial ter profissionais qualificados para desenvolver essas soluções tecnológicas. O projeto também conecta os alunos a experiências que podem encontrar no mercado de trabalho.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseTecnologia" aria-expanded="false" aria-controls="collapseTecnologia">
+                                Tecnologia
+                            </button>
+                        </h3>
+                        <div id="collapseTecnologia" class="accordion-collapse collapse" data-bs-parent="#acordeonSobre">
+                            <div class="accordion-body">
+                                A tecnologia está presente em todo o processo de criação do POIEL, desde a elaboração da interface até an organização das informações dos livros. O objetivo do projeto, utilizando HTML, CSS e MySQL, é desenvolver uma plataforma que torne mais simples o cadastro, a busca e a troca de livros entre alunos do IFSC. Dessa forma, a tecnologia é utilizada para atender uma demanda da comunidade acadêmica, facilitando o acesso à leitura.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapsePoder" aria-expanded="false" aria-controls="collapsePoder">
+                                Poder
+                            </button>
+                        </h3>
+                        <div id="collapsePoder" class="accordion-collapse collapse" data-bs-parent="#acordeonSobre">
+                            <div class="accordion-body">
+                                O poder está relacionado à possibilidade de ampliar o acesso à informação e ao conhecimento. Nem todos os estudantes possuem as mesmas condições para adquirir livros, e iniciativas de compartilhamento podem contribuir para diminuir essas diferenças. Com o POIEL, buscamos oferecer mais oportunidades de acesso à leitura, permitindo que os livros circulem entre diferentes pessoas e que o conhecimento alcance mais estudantes.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Nosso propósito -->
+        <section class="row justify-content-center mb-5">
+            <div class="col-lg-9">
+                <div class="bloco-papel p-4 p-md-5">
+                    <h2 class="titulo h3 mb-3">Nosso propósito</h2>
+                    <p class="fs-5 lh-lg mb-0">
+                        Pensamos que um livro pode conter várias narrativas. além daquilo que está registrado em suas páginas. Com o POIEL, buscamos incentivar o movimento de livros, conectar leitores e demonstrar que o conhecimento pode ser compartilhado.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Equipe -->
+        <section class="mb-5">
+            <h2 class="text-center titulo h3 mb-4">Quem desenvolveu o POIEL</h2>
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4 justify-content-center">
+
+                <div class="col">
+                    <article class="card membro h-100 text-center">
+                        <img src="../img/Heitor.jpg" alt="Foto de Heitor" class="membro-foto">
+                        <div class="card-body p-0">
+                            <p class="membro-nome">Heitor</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col">
+                    <article class="card membro h-100 text-center">
+                        <img src="../img/Liz.jpg" alt="Foto de Liz" class="membro-foto">
+                        <div class="card-body p-0">
+                            <p class="membro-nome">Liz</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col">
+                    <article class="card membro h-100 text-center">
+                        <img src="../img/Heloisa.jpg" alt="Foto de Heloisa" class="membro-foto">
+                        <div class="card-body p-0">
+                            <p class="membro-nome">Heloísa</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col">
+                    <article class="card membro h-100 text-center">
+                        <img src="../img/Julia.jpg" alt="Foto de Julia" class="membro-foto">
+                        <div class="card-body p-0">
+                            <p class="membro-nome">Julia</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col">
+                    <article class="card membro h-100 text-center">
+                        <img src="../img/Sofi.jpg" alt="Foto de Sofia" class="membro-foto">
+                        <div class="card-body p-0">
+                            <p class="membro-nome">Sofia</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col">
+                    <article class="card membro h-100 text-center">
+                        <img src="../img/Manu.jpg" alt="Foto de Emanuely" class="membro-foto">
+                        <div class="card-body p-0">
+                            <p class="membro-nome">Emanuely</p>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer-poiel text-center py-4">
+        <p class="mb-0 fst-italic">Sua próxima história pode estar na estante de alguém.</p>
+    </footer>
+
+    <!-- Bootstrap JS: sanfona e menu mobile -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
