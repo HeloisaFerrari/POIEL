@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página principal</title>
+  <link rel="stylesheet" href="index.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../Páginas_CSS/index.css">
+  <link rel="stylesheet" href="../Páginas_CSS/global.css">
+
+</head>
+<body>
+  <nav class="nav-poiel" aria-label="Navegação principal">
+    <div class="nav-conteudo">
+        <a class="nav-marca" href="index.html">POIEL</a>
+        <button class="nav-botao" id="nav-botao" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="index.html">Principal</a></li>
+            <li><a href="paginadetroca.html">Minhas Trocas</a></li>
+            <li><a href="cadastrolivro.html">Cadastro Livro</a></li>
+            <li><a href="sobrenos.html">Sobre nós</a></li>
+             <li><a href="perfilusuario.html">Meu Perfil</a></li>
+        </ul>
+    </div>
+</nav>
+ 
+     <main class="container py-5">
+ 
+        <!-- Introdução -->
+        <div class="titulo-pagina mb-4">
+            <h1>Bem-vindo ao POIEL</h1>
+            <p>Troque livros com outros estudantes da sua escola.</p>
+        </div>
+ 
+        <div class="caixa-info mb-4">
+            <strong>O que é o POIEL?</strong><br>
+            Uma plataforma para trocar livros com outros estudantes: escolha um livro, ofereça um dos seus e combine a troca.
+        </div>
+ 
+        <!-- Busca -->
+        <form class="busca d-flex gap-2 mb-3" id="formBusca" role="search">
+            <input class="form-control" type="search" id="campoBusca" placeholder="Buscar livro ou autor">
+            <button class="btn btn-chat" type="submit"><i class="bi bi-search"></i> Buscar</button>
+        </form>
+ 
+        <!-- Gêneros -->
+        <div class="d-flex flex-wrap gap-2 mb-4" id="generos"></div>
+ 
+        <!-- Biblioteca -->
+        <h2 class="titulo-secao mb-3" id="biblioteca">Livros disponíveis</h2>
+        <div class="grade-livros" id="grade"></div>
+        <p class="vazio d-none" id="semResultado">Nenhum livro encontrado. Tente outro nome ou gênero.</p>
+ 
+        <!-- Paginação -->
+        <nav class="paginacao" id="paginacao" aria-label="Paginação da biblioteca"></nav>
+    </main>
+ 
+    <!-- MODAL DO LIVRO -->
+    <div class="modal fade" id="modalLivro" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="mTitulo"></h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+ 
+                    <!-- Passo 1: detalhes -->
+                    <div id="passoDetalhes">
+                        <div class="capas-modal mb-3" id="mCapas"></div>
+                        <span class="status mb-2" id="mGenero"></span>
+                        <p class="detalhes mt-2">Autor: <strong id="mAutor"></strong></p>
+                        <p class="detalhes">Estado de conservação: <strong id="mEstado"></strong></p>
+                        <p class="detalhes">Dono: <strong id="mDono"></strong>
+                            · <span class="estrelas" id="mEstrelas"></span> <span id="mNota"></span></p>
+                        <p class="detalhes text-danger d-none" id="avisoMeu">Este livro é seu, então você não pode propor troca com ele.</p>
+                    </div>
+ 
+                    <!-- Passo 2: escolher o livro para oferecer -->
+                    <div id="passoTroca" class="d-none">
+                        <p class="detalhes">Escolha qual dos seus livros você quer oferecer:</p>
+                        <div id="meusLivros"></div>
+                        <p class="vazio d-none" id="semLivros">Você ainda não tem livros cadastrados. Cadastre um para propor a troca.</p>
+                        <a class="btn-mais mt-2" href="cadastrolivro.html"><i class="bi bi-plus-lg"></i> Cadastrar livro</a>
+                    </div>
+                </div>
+ 
+                <div class="modal-footer">
+                    <button class="btn btn-avaliar d-none" id="btnVoltar">Voltar</button>
+                    <button class="btn btn-chat" id="btnTrocar"><i class="bi bi-arrow-left-right"></i> Realizar troca</button>
+                    <button class="btn btn-chat d-none" id="btnEnviar" disabled>Enviar proposta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer-poiel">
+    <p>Sua próxima história pode estar na estante de alguém.</p>
+</footer>
+
+    <script src="../JS/global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../JS/index.js"></script>
+      
+</body>
+</html>
