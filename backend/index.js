@@ -14,12 +14,12 @@ app.use(require('./rotasPerfil'));
 app.use(require('./rotasTroca'));
 
 // Serve a pasta front-end inteira (HTML, CSS, JS e imagens).
-// Assim os caminhos "../JS/login.js" e "../Páginas_CSS/..." das páginas funcionam.
+// Assim os caminhos "../JS/login.js" e "../paginas_CSS/..." das páginas funcionam.
 app.use(express.static(path.join(__dirname, '..', 'front-end')));
 
 // Atalhos: a raiz e /cadastroLogin levam para a página de login
 app.get(['/', '/cadastroLogin'], (req, res) => {
-  res.redirect('/Páginas_HTML/cadastroLogin.html');
+  res.redirect('/paginas_HTML/cadastroLogin.html');
 });
 
 // O front-end chama a API em http://localhost:3000, então a porta padrão é 3000

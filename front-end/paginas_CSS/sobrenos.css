@@ -1,0 +1,149 @@
+/* Ajustes da página Sobre nós, com a paleta do cadastrolivro.css */
+body {
+    background-color: #e8e6df;
+    background-image: radial-gradient(rgba(74, 95, 90, 0.25) 1px, transparent 1.2px);
+    background-size: 26px 26px;
+}
+
+.view {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    color: #314938;
+}
+
+.page-head h1 { color: #314938; letter-spacing: -0.01em; }
+.page-head p  { color: #4a5f5a; }
+
+.about-lead p { line-height: 1.7; color: #314938; }
+
+.thematic-card {
+    background-color: #f4f3ee;
+    background-image: linear-gradient(transparent 95%, rgba(156, 182, 173, 0.38) 95%);
+    background-size: 100% 2.1rem;
+    border-radius: 14px;
+    padding: 1.25rem;
+    box-shadow: inset 0 0 34px rgba(74, 95, 90, 0.14), 0 4px 0 #9cb6ad;
+}
+.thematic-card h3 { color: #314938; }
+
+.team-card {
+    background: linear-gradient(145deg, #4a5f5a, #314938);
+    color: #f4f3ee;
+    border-radius: 22px;
+    padding: 14px;
+    text-align: center;
+    box-shadow: 0 8px 0 #263a2c;
+}
+.team-photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+.footer-poiel {
+    background-color: #314938;
+    color: #f4f3ee;
+    text-align: center;
+    padding: 1rem;
+}
+.footer-poiel p { margin: 0; }
+.thematic-card {
+    background: #f4f3ee;
+    background-image: linear-gradient(transparent 95%, rgba(156, 182, 173, 0.38) 95%);
+    background-size: 100% 2.1rem;
+    border-left: 6px solid #4a5f5a;
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 0 #9cb6ad, 0 12px 24px -12px rgba(49, 73, 56, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.thematic-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 0 #9cb6ad, 0 18px 30px -14px rgba(49, 73, 56, 0.45);
+}
+.thematic-card h3 {
+    color: #314938;
+    margin-top: 0;
+}
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.team-card {
+    background: linear-gradient(145deg, #4a5f5a, #314938);
+    color: #f4f3ee;
+    border-radius: 22px;
+    padding: 14px 14px 1.25rem;
+    text-align: center;
+    box-shadow: 0 8px 0 #263a2c;
+}
+
+.team-photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 3px solid #e8e6df;
+    margin-bottom: 0.75rem;
+}
+body {
+    background-color: #e8e6df;
+    background-image: radial-gradient(rgba(74, 95, 90, 0.25) 1px, transparent 1.2px);
+    background-size: 26px 26px;
+    font-family: "Georgia", serif;
+    color: #314938;
+}
+
+.page-head h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: -0.02em;
+    border-bottom: 3px solid #9cb6ad;
+    display: inline-block;
+    padding-bottom: 0.25rem;
+}
+.page-head p { color: #4a5f5a; font-style: italic; }
+.thematic-card h3 {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    user-select: none;
+}
+
+.thematic-card h3::after {
+    content: "▾";
+    font-size: 1.25rem;
+    transition: transform 0.35s ease;
+}
+
+.thematic-card.is-open h3::after {
+    transform: rotate(180deg);
+}
+
+/* Efeito sanfona: anima a altura com grid-template-rows (0fr → 1fr) */
+.thematic-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease, opacity 0.3s ease;
+    opacity: 0;
+}
+
+.thematic-card.is-open .thematic-body {
+    grid-template-rows: 1fr;
+    opacity: 1;
+}
+
+.thematic-body > div {
+    overflow: hidden;
+    min-height: 0;
+}
+
+.thematic-body p {
+    margin-top: 0.75rem;
+}

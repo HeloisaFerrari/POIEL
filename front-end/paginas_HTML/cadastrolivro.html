@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@400;500;600;700...&family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="cadastroUsuario.css">
-    <link rel="stylesheet" href="../Páginas_CSS/global.css">
+    <link rel="stylesheet" href="../paginas_CSS/global.css">
     <script>
         tailwind.config = {
             theme: {
@@ -459,6 +459,7 @@
 </footer>
 
 <script src="../JS/global.js"></script>
+<script src="../JS/cache.js"></script>
 
     <!-- Application JavaScript -->
     <script>
@@ -689,7 +690,8 @@
                 });
 
                 resetBookForm();
-                await carregarLivros();
+                cacheDoUsuario.invalidar("minhas-trocas");
+                await carregarLivros(false);
                 showToast('Livro Cadastrado!', `"${title}" foi adicionado à lista de livros para troca.`);
             } catch (erro) {
                 showToast('Erro', erro.message);
@@ -711,7 +713,8 @@
             if (!livro) return;
             try {
                 await chamarApi('/livros/' + bookId, { method: 'DELETE' });
-                await carregarLivros();
+                cacheDoUsuario.invalidar("minhas-trocas");
+                await carregarLivros(false);
                 showToast('Livro Removido', `"${livro.title}" foi removido da lista de troca.`);
             } catch (erro) {
                 showToast('Erro', erro.message);
@@ -719,23 +722,28 @@
         };
 
         // Busca os livros de quem está logado e desenha a estante
-        async function carregarLivros() {
+        function aplicarLivros(livros) {
+            registeredBooks = livros.map(l => ({
+                id: l.id_livro,
+                title: l.titulo,
+                author: l.autor,
+                genre: l.genero,
+                state: l.estado_conservacao,
+                frontCover: l.capa_url || createDefaultCoverSVG(l.titulo, 'Capa Frontal • ' + l.autor, '#e8e6df', '#4a5f5a'),
+                backCover: l.contracapa_url || createDefaultCoverSVG(l.titulo, 'Contracapa • ' + l.genero, '#f4f3ee', '#9cb6ad'),
+                showingBack: false
+            }));
+            renderBookshelf();
+        }
+
+        // abre na hora com o que já está guardado e atualiza em seguida
+        async function carregarLivros(mostrarCache = true) {
             try {
-                const livros = await chamarApi('/meus-livros');
-                registeredBooks = livros.map(l => ({
-                    id: l.id_livro,
-                    title: l.titulo,
-                    author: l.autor,
-                    genre: l.genero,
-                    state: l.estado_conservacao,
-                    frontCover: l.capa_url || createDefaultCoverSVG(l.titulo, 'Capa Frontal • ' + l.autor, '#e8e6df', '#4a5f5a'),
-                    backCover: l.contracapa_url || createDefaultCoverSVG(l.titulo, 'Contracapa • ' + l.genero, '#f4f3ee', '#9cb6ad'),
-                    showingBack: false
-                }));
+                await carregarComCache('meus-livros', () => chamarApi('/meus-livros'), aplicarLivros, { mostrarCache });
             } catch (erro) {
                 showToast('Erro', erro.message);
+                renderBookshelf();
             }
-            renderBookshelf();
         }
 
         // Render Book Cards

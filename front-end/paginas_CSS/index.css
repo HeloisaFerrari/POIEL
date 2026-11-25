@@ -196,3 +196,31 @@
         .btn-mais:hover{ background-color: #f1f7ec; color: var(--forest-sage); }
  
         footer{ background-color: var(--deep-sage); color: #ffffff; font-size: larger; }
+/* ===== Regras que só existiam na versão antiga (Páginas_CSS/index.css) ===== */
+.card-livro:focus-visible {
+    outline: 3px solid var(--light-sage);
+    outline-offset: 3px;
+}
+.btn-chat:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--deep-sage); }
+.capas-modal .capa-fallback { height: 200px; }
+.livro-opcao:hover { transform: translateX(3px); }
+
+@media (max-width: 576px) {
+    .grade-livros {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+    .capa-livro img,
+    .capa-fallback { height: 160px; }
+    .caixa-info { padding: 14px 16px; }
+}
+
+/* ===== ACESSIBILIDADE ===== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}
