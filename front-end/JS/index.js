@@ -1,5 +1,4 @@
 /* ===== LOGIN E CONEXÃO COM O BACK-END ===== */
-        const URL_API = "http://localhost:3000";
         const tokenLogin = localStorage.getItem("token");
         const usuarioLogado = JSON.parse(localStorage.getItem("usuario") || "null");
         if(!tokenLogin || !usuarioLogado){

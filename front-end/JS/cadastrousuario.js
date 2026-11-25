@@ -1,4 +1,3 @@
-const URL_API = "http://localhost:3000";
 
 const form = document.getElementById("formCadastro");
 const msg = document.getElementById("mensagem");

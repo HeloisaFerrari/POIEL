@@ -1,0 +1,5 @@
+{
+  "redirects": [
+    { "source": "/", "destination": "/paginas_HTML/cadastroLogin.html", "permanent": false }
+  ]
+}

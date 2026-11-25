@@ -1,0 +1,15 @@
+# Configuração do servidor (back-end) no Render.
+# No Render: New → Blueprint → escolha este repositório.
+services:
+  - type: web
+    name: poiel-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        sync: false        # o Render vai pedir para você colar o endereço do banco (Supabase)
+      - key: JWT_SECRET
+        generateValue: true # o Render cria um segredo novo e aleatório sozinho

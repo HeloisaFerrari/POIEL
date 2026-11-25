@@ -22,7 +22,7 @@ app.get(['/', '/cadastroLogin'], (req, res) => {
   res.redirect('/paginas_HTML/cadastroLogin.html');
 });
 
-// O front-end chama a API em http://localhost:3000, então a porta padrão é 3000
+// No computador a porta é 3000; no Render a porta vem da variável PORT
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

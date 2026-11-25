@@ -1,5 +1,4 @@
 /* ===== CONEXÃO COM O BACK-END ===== */
-const URL_API = 'http://localhost:3000';
 const tokenLogin = localStorage.getItem('token');
 if (!tokenLogin) {
     window.location.href = 'cadastroLogin.html'; // sem login, volta para a página de login

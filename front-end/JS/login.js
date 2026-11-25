@@ -1,4 +1,3 @@
-const URL_API = "http://localhost:3000";
 
 // chegar na tela de login significa estar deslogado: limpa a sessão e o que estava guardado
 localStorage.removeItem("token");
