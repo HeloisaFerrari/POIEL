@@ -42,6 +42,11 @@ router.post('/cadastro', async (req, res) => {
 
     res.status(201).json(resultado.rows[0]);
   } catch (erro) {
+    // 23505 = o banco recusou porque o e-mail ou a matrícula já existem
+    // (acontece se dois cadastros iguais chegam ao mesmo tempo e os dois passam pela checagem acima)
+    if (erro.code === '23505') {
+      return res.status(409).json({ erro: 'E-mail ou matrícula já cadastrados' });
+    }
     console.error(erro);
     res.status(500).json({ erro: 'Erro ao cadastrar usuário' });
   }
